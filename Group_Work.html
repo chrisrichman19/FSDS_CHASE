@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>CHASE’s Group Project</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="Group_Work_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Group_Work_files/libs/quarto-html/quarto.js"></script>
+<script src="Group_Work_files/libs/quarto-html/popper.min.js"></script>
+<script src="Group_Work_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Group_Work_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Group_Work_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Group_Work_files/libs/quarto-html/quarto-syntax-highlighting-29e2c20b02301cfff04dc8050bf30c7e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Group_Work_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Group_Work_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Group_Work_files/libs/bootstrap/bootstrap-38e278fa782c3c623597b4482e05be6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#who-collected-the-insideairbnb-data" id="toc-who-collected-the-insideairbnb-data" class="nav-link active" data-scroll-target="#who-collected-the-insideairbnb-data">1. Who collected the InsideAirbnb data?</a></li>
+  <li><a href="#why-did-they-collect-the-insideairbnb-data" id="toc-why-did-they-collect-the-insideairbnb-data" class="nav-link" data-scroll-target="#why-did-they-collect-the-insideairbnb-data">2. Why did they collect the InsideAirbnb data?</a></li>
+  <li><a href="#how-did-they-collect-it" id="toc-how-did-they-collect-it" class="nav-link" data-scroll-target="#how-did-they-collect-it">3. How did they collect it?</a></li>
+  <li><a href="#how-does-the-method-of-collection-q3-impact-the-completeness-andor-accuracy-of-the-insideairbnb-data-how-well-does-it-represent-the-process-it-seeks-to-study-and-what-wider-issues-does-this-raise" id="toc-how-does-the-method-of-collection-q3-impact-the-completeness-andor-accuracy-of-the-insideairbnb-data-how-well-does-it-represent-the-process-it-seeks-to-study-and-what-wider-issues-does-this-raise" class="nav-link" data-scroll-target="#how-does-the-method-of-collection-q3-impact-the-completeness-andor-accuracy-of-the-insideairbnb-data-how-well-does-it-represent-the-process-it-seeks-to-study-and-what-wider-issues-does-this-raise">4. How does the method of collection (Q3) impact the completeness and/or accuracy of the InsideAirbnb data? How well does it represent the process it seeks to study, and what wider issues does this raise?</a></li>
+  <li><a href="#what-ethical-considerations-does-the-use-of-the-insideairbnb-data-raise" id="toc-what-ethical-considerations-does-the-use-of-the-insideairbnb-data-raise" class="nav-link" data-scroll-target="#what-ethical-considerations-does-the-use-of-the-insideairbnb-data-raise">5. What ethical considerations does the use of the InsideAirbnb data raise?</a></li>
+  <li><a href="#with-reference-to-the-insideairbnb-data-i.e.-using-numbers-figures-maps-and-descriptive-statistics-what-does-an-analysis-of-hosts-and-the-types-of-properties-that-they-list-suggest-about-the-nature-of-airbnb-lettings-in-london---total-698" id="toc-with-reference-to-the-insideairbnb-data-i.e.-using-numbers-figures-maps-and-descriptive-statistics-what-does-an-analysis-of-hosts-and-the-types-of-properties-that-they-list-suggest-about-the-nature-of-airbnb-lettings-in-london---total-698" class="nav-link" data-scroll-target="#with-reference-to-the-insideairbnb-data-i.e.-using-numbers-figures-maps-and-descriptive-statistics-what-does-an-analysis-of-hosts-and-the-types-of-properties-that-they-list-suggest-about-the-nature-of-airbnb-lettings-in-london---total-698">6. With reference to the InsideAirbnb data (<em>i.e.</em> using numbers, figures, maps, and descriptive statistics), what does an analysis of Hosts and the types of properties that they list suggest about the nature of Airbnb lettings in London? - Total 698</a></li>
+  <li><a href="#drawing-on-your-previous-answers-and-supporting-your-response-with-evidence-e.g.-figures-maps-edaesda-and-simple-statistical-analysismodels-drawing-on-experience-from-e.g.-casa0007-how-could-the-insideairbnb-data-set-be-used-to-inform-the-regulation-of-short-term-lets-stl-in-london" id="toc-drawing-on-your-previous-answers-and-supporting-your-response-with-evidence-e.g.-figures-maps-edaesda-and-simple-statistical-analysismodels-drawing-on-experience-from-e.g.-casa0007-how-could-the-insideairbnb-data-set-be-used-to-inform-the-regulation-of-short-term-lets-stl-in-london" class="nav-link" data-scroll-target="#drawing-on-your-previous-answers-and-supporting-your-response-with-evidence-e.g.-figures-maps-edaesda-and-simple-statistical-analysismodels-drawing-on-experience-from-e.g.-casa0007-how-could-the-insideairbnb-data-set-be-used-to-inform-the-regulation-of-short-term-lets-stl-in-london">7. Drawing on your previous answers, and supporting your response with evidence (<em>e.g.</em> figures, maps, EDA/ESDA, and simple statistical analysis/models drawing on experience from, e.g., CASA0007), how <em>could</em> the InsideAirbnb data set be used to inform the regulation of Short-Term Lets (STL) in London?</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a></li>
+  <li><a href="#sustainable-authorship-tools" id="toc-sustainable-authorship-tools" class="nav-link" data-scroll-target="#sustainable-authorship-tools">Sustainable Authorship Tools</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="Group_Work.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">CHASE’s Group Project</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="who-collected-the-insideairbnb-data" class="level2">
+<h2 class="anchored" data-anchor-id="who-collected-the-insideairbnb-data">1. Who collected the InsideAirbnb data?</h2>
+<p>The InsideAirbnb was collected by Murray Cox, Tom Slee, and a team of collaborators working to empower communities through data. Murray Cox is an Australian community artist, activist and photo- journalist who “uses data, media, and technology for social change” <span class="citation" data-cites="ia_about"><span>“About”</span> (<a href="#ref-ia_about" role="doc-biblioref">no date</a>)</span>. (40)</p>
+</section>
+<section id="why-did-they-collect-the-insideairbnb-data" class="level2">
+<h2 class="anchored" data-anchor-id="why-did-they-collect-the-insideairbnb-data">2. Why did they collect the InsideAirbnb data?</h2>
+<p>Murray Cox and Tom Slee collected the InsideAirbnb data to critically assess the impact of Airbnb on housing markets, to provide unbiased independent publicly available data, and to facilitate the improved understanding of city authorities and regulatory bodies. Motivated by an observation of increasing entire-home listings and “multi-lister” hosts, Cox and Slee aimed to challenge Airbnb’s portrayal as a platform for casual home sharing, revealing that much of its revenue comes from commercial operators who are pushing out local residents by raising house prices <span class="citation" data-cites="carville_meet_2019">Carville (<a href="#ref-carville_meet_2019" role="doc-biblioref">2019</a>)</span>. (84)</p>
+</section>
+<section id="how-did-they-collect-it" class="level2">
+<h2 class="anchored" data-anchor-id="how-did-they-collect-it">3. How did they collect it?</h2>
+<p>Inside Airbnb’s data is collected through web-scraping, using public information from Airbnb’s website. There were two main stages of data collection: Identify listings for chosen set of coordinates. Collect the following information for each listing: listing type, approximate address, number of reviews and average review score, capacity, numbers of bedrooms and bathrooms, price, and coordinates. Data is periodically scraped for each location from the Airbnb website adamiak_airbnb_2019, <span class="citation" data-cites="ia_home"><span>“Home”</span> (<a href="#ref-ia_home" role="doc-biblioref">no date</a>)</span>. ()</p>
+</section>
+<section id="how-does-the-method-of-collection-q3-impact-the-completeness-andor-accuracy-of-the-insideairbnb-data-how-well-does-it-represent-the-process-it-seeks-to-study-and-what-wider-issues-does-this-raise" class="level2">
+<h2 class="anchored" data-anchor-id="how-does-the-method-of-collection-q3-impact-the-completeness-andor-accuracy-of-the-insideairbnb-data-how-well-does-it-represent-the-process-it-seeks-to-study-and-what-wider-issues-does-this-raise">4. How does the method of collection (Q3) impact the completeness and/or accuracy of the InsideAirbnb data? How well does it represent the process it seeks to study, and what wider issues does this raise?</h2>
+<p>Inside Airbnb (IA) data is limited as scraping can only take place using publicly available data; that which is allowed in Airbnb’s robots.txt file. Datasets are therefore only an approximation of the Airbnb market and might not be suitable for use by those requiring more detailed understanding of Airbnb’s effect on housing markets eg. policymakers.</p>
+<p>Using IA’s data relies solely on the data of Airbnb which only provides an estimation of the short term rental market. Some listings may be booked directly with hosts to avoid Airbnb’s additional charges, and therefore might appear unavailable on Airbnb, but are actually booked; distorting the true effect of Airbnb on the housing market <span class="citation" data-cites="prentice_2023">Prentice and Pawlicz (<a href="#ref-prentice_2023" role="doc-biblioref">2023</a>)</span>.</p>
+<p>As acknowledged by IA, listings’ geographic locations are not available, meaning that analysis must be aggregated to a higher level. This limits the ability to conduct detailed analysis of Airbnb’s effect on the housing market, as would be the case when conducting price analysis using distance to points of interest as explanatory variables <span class="citation" data-cites="todd_2022">Todd, Musah and Cheshire (<a href="#ref-todd_2022" role="doc-biblioref">2022</a>)</span>.</p>
+<p>IA programmer, Slee, T. (n.d.), states that ‘no guarantees are made about the quality of data obtained using this script, statistically or about an individual page,’ encouraging researchers to check validity on their own. Furthermore, the script was last updated in 2019 <span class="citation" data-cites="tslee_airbnbdata">Slee (<a href="#ref-tslee_airbnbdata" role="doc-biblioref">2024</a>)</span>, potentially resulting in inaccurate listing counts following changes to Airbnb’s data structure, reducing the useability of the data to assess housing market impacts.</p>
+<p>The IA data is therefore not ‘raw’, it is “verified, cleansed, analyzed and aggregated” <span class="citation" data-cites="ia_home"><span>“Home”</span> (<a href="#ref-ia_home" role="doc-biblioref">no date</a>)</span>, meaning the data is biased. Cleaning and aggregation removes detail and certain perspectives from the data. This erasure is especially significant when those working, processing and analysing the data are not aware of the context in which it was created <span class="citation" data-cites="dignazio_5_2020">D’Ignazio and Klein (<a href="#ref-dignazio_5_2020" role="doc-biblioref">2020</a>)</span>.</p>
+<p>Completeness and accuracy challenges raise the question of whether researchers should rely solely on data collected by one organisation, from one website, to analyse the impact of an industry. By focusing solely on the data provided by IA researchers will come to biased and partial conclusions that are influenced by the views of IA’s creators. (345)</p>
+</section>
+<section id="what-ethical-considerations-does-the-use-of-the-insideairbnb-data-raise" class="level2">
+<h2 class="anchored" data-anchor-id="what-ethical-considerations-does-the-use-of-the-insideairbnb-data-raise">5. What ethical considerations does the use of the InsideAirbnb data raise?</h2>
+<p>Terms of Service outline the contract through which users and Airbnb interact, specifying users must not scrape or use scrapers or crawlers to access or collect data <span class="citation" data-cites="airbnb_terms"><span>“Terms of <span>Service</span> - <span>Airbnb</span> <span>Help</span> <span>Centre</span>”</span> (<a href="#ref-airbnb_terms" role="doc-biblioref">no date</a>)</span>.</p>
+<p>From the perspective of an Airbnb user, having agreed to the Terms of Service, they expect that their data is protected. However, as InsideAirbnb demonstrates, these agreements do not guarantee that data will not be collected. Instead, Airbnb are relying on the conscience of the programmers to adhere to the Terms of Service and robot.txt files to guarantee privacy to their users.</p>
+<p>The Terms of Service is contradictory to the robot.txt file- the former specifies not scraping data at all, the latter could be considered as permission to scrape certain data by explicitly prohibiting access to other data.</p>
+<p>The robot.txt file is however non-binding, so relies on the programmer’s adherence, which could cause harm to Airbnb’s users and customers if not followed.</p>
+<p>InsideAirbnb data is collected through web scraping, in contradiction to the Terms of Service, so despite the efforts taken by IA to anonymise the data, Airbnb users have not given their informed consent for any data to be collected in this way, nor have they consented to their data being used by third parties in this manner, raising ethical considerations over the use of data provided by <span class="citation" data-cites="krotov_2020">Krotov, Johnson and Silva (<a href="#ref-krotov_2020" role="doc-biblioref">2020</a>)</span>.</p>
+<p>Another ethical issue is the accuracy of the data being provided. InsideAirbnb state that accuracy of the information compiled from the Airbnb site is not the responsibility of Inside Airbnb. Due care has been taken with any processing and analysis. - <span class="citation" data-cites="ia_home"><span>“Home”</span> (<a href="#ref-ia_home" role="doc-biblioref">no date</a>)</span>.</p>
+<p>As <span class="citation" data-cites="mason_1986">Mason (<a href="#ref-mason_1986" role="doc-biblioref">1986</a>)</span> explains, depending on how it is used, the data’s accuracy can raise ethical concerns. InsideAirbnb’s data is “used regularly over the last year by city analysts, journalists, academics and hospitality analysts” <span class="citation" data-cites="cox_how_airbnb">Cox and Slee (<a href="#ref-cox_how_airbnb" role="doc-biblioref">no date</a>)</span>. The use of such data by city analysts will impact the lives of those that fall under the jurisdiction of the city authority, raising the ethical consideration of the data’s accuracy due to the harm that may be caused from the use of Inside Airbnb’s potentially misrepresentative data. This is of further concern when those analysing the data do not fully understand the process through which it has been collected and the limits this brings, causing potentially significant economic and societal impacts if InsideAirbnb’s data is not used mindfully.</p>
+<p><span class="citation" data-cites="mason_1986">Mason (<a href="#ref-mason_1986" role="doc-biblioref">1986</a>)</span> argues that accessibility is also an ethical concern when it comes to using data. Not everyone has the technologies required to access the data, and even fewer have the intellectual skills to interpret and process the InsideAirbnb data. <span class="citation" data-cites="dignazio_5_2020">D’Ignazio and Klein (<a href="#ref-dignazio_5_2020" role="doc-biblioref">2020</a>)</span> explain that differential power has a silencing effect and that quantitative data can leave people out. Whilst InsideAirbnb’s mission is to “work towards a vision where communities are empowered with data and information” <span class="citation" data-cites="ia_home"><span>“Home”</span> (<a href="#ref-ia_home" role="doc-biblioref">no date</a>)</span>, its capability to do so is limited if the communities it seeks to empower lack the means to make use of the available data. The lack in transfer of data science skills and knowledge to the communities that InsideAirbnb seek to represent, and subsequent reliance on external researchers, mean that the imbalances in education and power will not be sufficiently addressed since the communities’ reality will only ever be told through the partial perspective of said researchers. (540)</p>
+</section>
+<section id="with-reference-to-the-insideairbnb-data-i.e.-using-numbers-figures-maps-and-descriptive-statistics-what-does-an-analysis-of-hosts-and-the-types-of-properties-that-they-list-suggest-about-the-nature-of-airbnb-lettings-in-london---total-698" class="level2">
+<h2 class="anchored" data-anchor-id="with-reference-to-the-insideairbnb-data-i.e.-using-numbers-figures-maps-and-descriptive-statistics-what-does-an-analysis-of-hosts-and-the-types-of-properties-that-they-list-suggest-about-the-nature-of-airbnb-lettings-in-london---total-698">6. With reference to the InsideAirbnb data (<em>i.e.</em> using numbers, figures, maps, and descriptive statistics), what does an analysis of Hosts and the types of properties that they list suggest about the nature of Airbnb lettings in London? - Total 698</h2>
+<p>There is a possibility of making the base map of the airbnb density the price so that we save 150 words. So there wont be a bar graph of average price.</p>
+<div id="1e5f827a" class="cell" data-execution_count="7">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Group_Work_files/figure-html/cell-8-output-1.png" width="1147" height="1143" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="calculating-percent-of-short-term-listings-per-borough" class="level3">
+<h3 class="anchored" data-anchor-id="calculating-percent-of-short-term-listings-per-borough">Calculating Percent of Short-Term Listings per Borough</h3>
+<p>Airbnb’s short-term listings are clustered in boroughs surrounding the City of London. 14.4% of listings occur in Westminster, followed by 8.1% in Kensington and Chelsea, then 7.5% in Camden.</p>
+<div id="4721a7bd" class="cell" data-execution_count="9">
+<div class="cell-output cell-output-stdout">
+<pre><code>Boroughs with Airbnb Percentages:
+                      NAME  Airbnb_Counts  Percentage
+32             Westminster           1123   14.408519
+19  Kensington and Chelsea            629    8.070310
+5                   Camden            586    7.518604
+29           Tower Hamlets            578    7.415961
+21                 Lambeth            463    5.940467
+27               Southwark            429    5.504234
+11                 Hackney            419    5.375930
+12  Hammersmith and Fulham            367    4.708750
+18               Islington            350    4.490634
+31              Wandsworth            320    4.105722
+3                    Brent            279    3.579677
+8                   Ealing            233    2.989479
+24                  Newham            200    2.566076
+1                   Barnet            182    2.335130
+13                Haringey            171    2.193995
+22                Lewisham            163    2.091352
+10               Greenwich            155    1.988709
+30          Waltham Forest            135    1.732102
+26    Richmond upon Thames            125    1.603798
+17                Hounslow            118    1.513985
+7                  Croydon            104    1.334360
+23                  Merton             91    1.167565
+25               Redbridge             72    0.923788
+16              Hillingdon             70    0.898127
+20    Kingston upon Thames             65    0.833975
+4                  Bromley             63    0.808314
+6           City of London             56    0.718501
+9                  Enfield             54    0.692841
+14                  Harrow             52    0.667180
+0     Barking and Dagenham             42    0.538876
+2                   Bexley             37    0.474724
+28                  Sutton             34    0.436233
+15                Havering             29    0.372081</code></pre>
+</div>
+</div>
+</section>
+<section id="calculating-the-average-price-of-airbnb-listings-in-london-boroughs" class="level3">
+<h3 class="anchored" data-anchor-id="calculating-the-average-price-of-airbnb-listings-in-london-boroughs">Calculating the Average Price of Airbnb Listings in London Boroughs</h3>
+<div id="681d97fa" class="cell" data-execution_count="10">
+<div class="cell-output cell-output-stdout">
+<pre><code>Average Price of Airbnb Listings per Borough:
+                      NAME  Average_Price
+32             Westminster          321.0
+19  Kensington and Chelsea          284.0
+6           City of London          233.0
+5                   Camden          202.0
+31              Wandsworth          179.0</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Group_Work_files/figure-html/cell-11-output-2.png" width="1143" height="758" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Westminster, Kensington and Chelsea, and the City of London exhibit the highest average prices, while Bexley and Harrow have the lowest, reflecting significant variation in short-term rental costs across the city.</p>
+</section>
+<section id="properties-available-for-over-90-nights" class="level3">
+<h3 class="anchored" data-anchor-id="properties-available-for-over-90-nights">Properties Available for over 90+ Nights</h3>
+<p>A concern that Airbnb imposes in London is ‘commercialisation’. The Greater London Authority (GLA) states that “it creates a risk of residential properties being used as letting businesses without the required planning permission and protections for neighbours” (Cromarty, 2024, p.26). To avoid this issue, homeowners are required to obtain planning permission if they intend to use residential properties for short-term accommodation exceeding 90 nights. In the current 2024 analysis, we found that there is a total of 6254 listings available for over 90+ nights. Westminster has 15.7% of those listings, Kensington and Chelsea at 9%, and Tower Hamlets at 7.5%.</p>
+<div id="15503689" class="cell" data-execution_count="11">
+<div class="cell-output cell-output-stdout">
+<pre><code>Airbnb Listings Available for 90+ nights by Borough (With Percentage):
+                      NAME  Airbnb_Counts  Percentage
+0     Barking and Dagenham             31    0.495683
+1                   Barnet            153    2.446434
+2                   Bexley             26    0.415734
+3                    Brent            205    3.277902
+4                  Bromley             47    0.751519
+5                   Camden            465    7.435241
+6           City of London             53    0.847458
+7                  Croydon             84    1.343140
+8                   Ealing            184    2.942117
+9                  Enfield             38    0.607611
+10               Greenwich            131    2.094659
+11                 Hackney            325    5.196674
+12  Hammersmith and Fulham            303    4.844899
+13                Haringey            137    2.190598
+14                  Harrow             42    0.671570
+15                Havering             26    0.415734
+16              Hillingdon             61    0.975376
+17                Hounslow             87    1.391110
+18               Islington            280    4.477135
+19  Kensington and Chelsea            562    8.986249
+20    Kingston upon Thames             47    0.751519
+21                 Lambeth            359    5.740326
+22                Lewisham            110    1.758874
+23                  Merton             66    1.055325
+24                  Newham            157    2.510393
+25               Redbridge             64    1.023345
+26    Richmond upon Thames             77    1.231212
+27               Southwark            329    5.260633
+28                  Sutton             28    0.447713
+29           Tower Hamlets            469    7.499201
+30          Waltham Forest             91    1.455069
+31              Wandsworth            235    3.757595
+32             Westminster            982   15.701951
+
+Total Airbnb Listings Available for 90+ nights: 6254</code></pre>
+</div>
+</div>
+<div id="cc0803e9" class="cell" data-execution_count="12">
+<div class="cell-output cell-output-stdout">
+<pre><code>Total Airbnb Listings Available for 90+ Nights: 6254
+
+Room Types Available for 90+ Nights:
+         Room Type  Count
+0  Entire home/apt   4455
+1     Private room   1774
+2      Shared room     19
+3       Hotel room      6</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Group_Work_files/figure-html/cell-13-output-2.png" width="759" height="566" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The most common ‘room types’ available for over 90+ nights are entire homes and apartments.</p>
+</section>
+<section id="hosts-with-multiple-listings" class="level3">
+<h3 class="anchored" data-anchor-id="hosts-with-multiple-listings">Hosts with Multiple Listings</h3>
+<p>GLA have discovered that hosts with multiple listings on Airbnb are more likely to be using the platform for commercial purposes (Cromarty, 2024, p.25). The total number of hosts with two or more listings is 6253 with the average number of listings per host being 7.06. The maximum number of listings is 1253 that belong to Sykes Holiday Cottages. This shows that the Airbnb market in London is commercialised and does not adhere to the GLA 90-night policy limit.</p>
+<div id="76812e03" class="cell" data-execution_count="13">
+<div class="cell-output cell-output-stdout">
+<pre><code>Total number of hosts with more than 2 listings: 6253
+Average number of listings per host: 7.06
+Maximum number of listings: 1253
+Minimum number of listings (2 or more): 2
+
+Host(s) with the most listings:
+                   host_name  total_listings
+5518  Sykes Holiday Cottages            1253</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="drawing-on-your-previous-answers-and-supporting-your-response-with-evidence-e.g.-figures-maps-edaesda-and-simple-statistical-analysismodels-drawing-on-experience-from-e.g.-casa0007-how-could-the-insideairbnb-data-set-be-used-to-inform-the-regulation-of-short-term-lets-stl-in-london" class="level2">
+<h2 class="anchored" data-anchor-id="drawing-on-your-previous-answers-and-supporting-your-response-with-evidence-e.g.-figures-maps-edaesda-and-simple-statistical-analysismodels-drawing-on-experience-from-e.g.-casa0007-how-could-the-insideairbnb-data-set-be-used-to-inform-the-regulation-of-short-term-lets-stl-in-london">7. Drawing on your previous answers, and supporting your response with evidence (<em>e.g.</em> figures, maps, EDA/ESDA, and simple statistical analysis/models drawing on experience from, e.g., CASA0007), how <em>could</em> the InsideAirbnb data set be used to inform the regulation of Short-Term Lets (STL) in London?</h2>
+<p>Insights from the previous section highlight the commercialized reality of Airbnb in London despite official regulations. Failure to limit Airbnb has the potential to exacerbate the affordable housing crisis in London by reducing the availability of long-term rentals. The impact of Airbnb is of particular concern with regard to deprived households, whereby increased housing costs can contribute to displacement, making it more difficult for these residents to remain in their communities.</p>
+<p>Our analysis aims to answer the following questions: What wards are “at risk” of becoming an Airbnb hotspot? Of these wards, which are also the most vulnerable to the negative social impacts of Airbnb?</p>
+<p>We filtered the Airbnb dataset to focus on listings most relevant to neighbourhood impacts:</p>
+<ul>
+<li><p>Minimum Nights: Excluded stays over 30 nights to target short-term rentals.</p></li>
+<li><p>Recently Active: Included listings with reviews in the past six months for current relevance.</p></li>
+<li><p>Availability: Kept listings available at least 90 days annually to capture impactful activity.</p></li>
+<li><p>Room Type: Focused on “Entire home/apt” listings due to their greater effect on housing and neighbourhood dynamics.</p></li>
+</ul>
+<section id="data-reading-and-wrangling" class="level3">
+<h3 class="anchored" data-anchor-id="data-reading-and-wrangling">Data Reading and Wrangling</h3>
+<div id="1314e017" class="cell" data-execution_count="16">
+<div class="cell-output cell-output-stdout">
+<pre><code>gdown is already installed. Skipping installation.
+File already exists: London_Points_Of_Interest.gpkg. Skipping download.
+File size: 129515520 bytes</code></pre>
+</div>
+</div>
+</section>
+<section id="analysis" class="level3">
+<h3 class="anchored" data-anchor-id="analysis">Analysis</h3>
+<section id="decision-tree-model" class="level4">
+<h4 class="anchored" data-anchor-id="decision-tree-model">Decision Tree Model</h4>
+<p>We chose a decision tree methodology for this analysis due to its high interpretability, making it easy for policymakers to understand how each ward was classified as “at-risk” or “too late”. Each classification decision the model makes can be easily traced in a simple, visual format.</p>
+<p>The decision tree predicts whether a ward is likely to have high Airbnb density using ward-level characteristics of public transport accessibility, house prices, and point of interest density, which we then use to categorise each London ward into one of three groups:</p>
+<p><strong>Too Late</strong>: Wards already heavily impacted by Airbnb, that are in the top 5% of airbnb’s per 1000 households.</p>
+<p><strong>At Risk</strong>: Wards predicted to have high Airbnb density but do not meet the threshold.</p>
+<p><strong>Neither</strong>: Wards that don’t fall into either category.</p>
+<p>We selected these variables as research has shown that higher-income neighborhoods, better transit access, and proximity to attractions significantly influence Airbnb activity <span class="citation" data-cites="jiao_empirical_2020">Jiao and Bai (<a href="#ref-jiao_empirical_2020" role="doc-biblioref">2020</a>)</span>.</p>
+<div id="bde5a6e3" class="cell" data-execution_count="18">
+<div class="cell-output cell-output-stdout">
+<pre><code>AirBnb Density 'Too-Late' Threshold: 5.63 per 1000 households
+
+Average Ward AirBnb Density: 1.43 per 1000 households 
+Average Ward House Price: £434,979 
+Average Ward Point of Interest Density: 0.27 
+Average Ward Public Transport Accessibility Score: 3.78</code></pre>
+</div>
+</div>
+<div id="2245ebae" class="cell" data-execution_count="19">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Group_Work_files/figure-html/cell-20-output-1.png" width="912" height="611" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpreting-the-decision-tree" class="level4">
+<h4 class="anchored" data-anchor-id="interpreting-the-decision-tree">Interpreting the Decision Tree</h4>
+<p>The decision tree model identifies two scenarios where a ward is predicted to have a high Airbnb density:</p>
+<p>Transport Accessibility score of more than 6.75 and a Median House Price of more than £477,000</p>
+<p><strong>or</strong></p>
+<p>Transport Accessibility score of less than or equal to 6.75 and a point of interest density of more than 1.059 per hectare.</p>
+<p>The results suggest that high Airbnb density is linked to well-connected areas with above-average housing prices, though less connected areas can also attract Airbnb activity if they offer a high concentration of attractions and amenities.</p>
+<p>There are 9 wards that meet either of these conditions but do not exceed the ‘too late’ Airbnb density threshold, so we have categorised them as ‘at-risk’.</p>
+<div id="3b0fe7a9" class="cell" data-execution_count="20">
+<div class="cell-output cell-output-stdout">
+<pre><code>These at-risk wards are: Lambeth - Bishop's, Hammersmith and Fulham - Shepherd's Bush Green, Westminster - Vincent Square, Westminster - Warwick, Camden - Camden Town with Primrose Hill, Islington - St. Mary's, Islington - Bunhill, Islington - Finsbury Park, Hackney - Dalston</code></pre>
+</div>
+</div>
+<div id="7b77c5f1" class="cell" data-execution_count="21">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Group_Work_files/figure-html/cell-22-output-1.png" width="824" height="636" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="at-risk-wards-and-deprivation" class="level3">
+<h3 class="anchored" data-anchor-id="at-risk-wards-and-deprivation">“At-Risk” Wards and Deprivation</h3>
+<p>To assess potential social impact of Airbnb in London, we analyzed the relationship between our Airbnb decision tree classifications and deprivation rank in wards. Deprivation rank is a relative measure comparing the level of deprivation across London wards. The lower the deprivation rank, the greater the deprivation score in the ward.</p>
+<section id="eda" class="level4">
+<h4 class="anchored" data-anchor-id="eda">EDA</h4>
+<div id="58079dd0" class="cell" data-execution_count="22">
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean Deprivation Rank for 'at-risk' wards: 200
+Mean Deprivation Rank for 'too-late' wards: 319
+Mean Deprivation Rank for 'neither' wards: 315</code></pre>
+</div>
+</div>
+<p>We begin with an exploratory data analysis of deprivation and ward classifications. The results shows the average deprivation rank between classification types. We see that the mean deprivation of “at-risk” wards is lower than “too-late” wards. This suggests that “at-risk” wards are not only desirable to Airbnb letters based on our classification, but are also particularly vulnerable to the negative impacts of Airbnb due to these areas being more deprived on average.</p>
+</section>
+<section id="spatial-autocorrelation-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="spatial-autocorrelation-analysis">Spatial Autocorrelation Analysis</h4>
+<p>The question of remains where overlaps between “at-risk” wards and high deprivation occur. Spatial autocorrelation analysis of deprivation in London wards was employed to assess the spatial distribution of deprived wards and examine which “at-risk” wards lie within high deprivation clusters. Cluster analysis improves the generalizability of the study by identifying patterns of deprivation beyond individual wards with arbitrary boundaries.</p>
+<p>Moran’s I:</p>
+<div id="6c0434a5" class="cell" data-execution_count="23">
+<div class="cell-output cell-output-stdout">
+<pre><code>Global Moran's I: 0.6888600665914413
+p-value: 0.001</code></pre>
+</div>
+</div>
+<p>A Moran’s I test is conducted to establish that deprivation is not randomly distributed across wards in London. A Global Moran’s I statistic of 0.689 with a p-value less than 0.05 indicates there is statistically significant clustering of deprivation in London wards.</p>
+<p>LISA:</p>
+<div id="f35abef2" class="cell" data-execution_count="24">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Group_Work_files/figure-html/cell-25-output-1.png" width="824" height="636" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Local indicators of spatial autocorrelation (LISA) statistics allow us to visualize the clustering of deprivation in London. Outlining “at-risk” wards in yellow, we see an overlap of deprivation clustering and “at-risk” classification for three wards in Islington, one in Hackney, one in Camden, and one in Hammersmith and Fulham.</p>
+</section>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The study concludes there are 9 wards “at-risk” of becoming heavily saturated by Airbnb. Furthermore, six of these wards are located within clusters of high deprivation. City policy should focus on better regulating and limiting Airbnbs in the the boroughs of Islington, Hackney, and Hammersmith and Fulham to mitigate the negative impacts of Airbnb on vulnerable populations.</p>
+</section>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
+<ul>
+<li>old data</li>
+<li>predictive power of decision tree? unclear, need other tests/studies</li>
+<li>deprivation broad measure, need better understanding which forms of deprivation most prevalent in chosen wards, for better context-specific policy</li>
+<li>qualitative research/local knowledge to inform of local experience w/ airbnb</li>
+</ul>
+</section>
+<section id="sustainable-authorship-tools" class="level2">
+<h2 class="anchored" data-anchor-id="sustainable-authorship-tools">Sustainable Authorship Tools</h2>
+<p>Using the Terminal in Docker, you compile the Quarto report using <code>quarto render &lt;group_submission_file&gt;.qmd</code>.</p>
+<p>Your QMD file should automatically download your BibTeX and CLS files and any other required files. If this is done right after library loading then the entire report should output successfully.</p>
+<p>Written in Markdown and generated from <a href="https://quarto.org/">Quarto</a>. Fonts used: <a href="https://fonts.google.com/specimen/Spectral">Spectral</a> (mainfont), <a href="https://fonts.google.com/specimen/Roboto">Roboto</a> (<span style="font-family:Sans-Serif;">sansfont</span>) and <a href="https://fonts.google.com/specimen/JetBrains%20Mono">JetBrains Mono</a> (<code>monofont</code>).</p>
+</section>
+<section id="references" class="level2 unnumbered">
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body" role="list">
+<div id="ref-ia_about" class="csl-entry" role="listitem">
+<span>“About”</span> (no date). Available at: <a href="https://insideairbnb.com/about/">https://insideairbnb.com/about/</a> (Accessed: December 15, 2024).
+</div>
+<div id="ref-carville_meet_2019" class="csl-entry" role="listitem">
+Carville, O. (2019) <span>“Meet <span>Murray</span> <span>Cox</span>, <span>The</span> <span>Man</span> <span>Trying</span> to <span>Take</span> <span>Down</span> <span>Airbnb</span>,”</span> <em>Bloomberg.com</em>. Available at: <a href="https://www.bloomberg.com/news/articles/2019-05-23/meet-murray-cox-airbnb-s-public-enemy-no-1-in-new-york">https://www.bloomberg.com/news/articles/2019-05-23/meet-murray-cox-airbnb-s-public-enemy-no-1-in-new-york</a> (Accessed: December 15, 2024).
+</div>
+<div id="ref-cox_how_airbnb" class="csl-entry" role="listitem">
+Cox, M. and Slee, T. (no date) <span>“How <span>Airbnb</span>’s data hid the facts in <span>New</span> <span>York</span> <span>City</span>.”</span>
+</div>
+<div id="ref-dignazio_5_2020" class="csl-entry" role="listitem">
+D’Ignazio, C. and Klein, L. (2020) <span>“5. <span>Unicorns</span>, <span>Janitors</span>, <span>Ninjas</span>, <span>Wizards</span>, and <span>Rock</span> <span>Stars</span>,”</span> <em>Data Feminism</em>. Available at: <a href="https://data-feminism.mitpress.mit.edu/pub/2wu7aft8/release/3">https://data-feminism.mitpress.mit.edu/pub/2wu7aft8/release/3</a> (Accessed: December 15, 2024).
+</div>
+<div id="ref-ia_home" class="csl-entry" role="listitem">
+<span>“Home”</span> (no date). Available at: <a href="https://insideairbnb.com/">https://insideairbnb.com/</a> (Accessed: December 15, 2024).
+</div>
+<div id="ref-jiao_empirical_2020" class="csl-entry" role="listitem">
+Jiao, J. and Bai, S. (2020) <span>“An empirical analysis of <span>Airbnb</span> listings in forty <span>American</span> cities,”</span> <em>Cities</em>, 99, p. 102618. doi: <a href="https://doi.org/10.1016/j.cities.2020.102618">10.1016/j.cities.2020.102618</a>.
+</div>
+<div id="ref-krotov_2020" class="csl-entry" role="listitem">
+Krotov, V., Johnson, L. and Silva, L. (2020) <span>“Tutorial: <span>Legality</span> and <span>Ethics</span> of <span>Web</span> <span>Scraping</span>,”</span> <em>Communications of the Association for Information Systems</em>, 47(1). doi: <a href="https://doi.org/10.17705/1CAIS.04724">10.17705/1CAIS.04724</a>.
+</div>
+<div id="ref-mason_1986" class="csl-entry" role="listitem">
+Mason, R. O. (1986) <span>“Four <span>Ethical</span> <span>Issues</span> of the <span>Information</span> <span>Age</span>,”</span> <em>MIS Quarterly</em>, 10(1), pp. 5–12. doi: <a href="https://doi.org/10.2307/248873">10.2307/248873</a>.
+</div>
+<div id="ref-prentice_2023" class="csl-entry" role="listitem">
+Prentice, C. and Pawlicz, A. (2023) <span>“Addressing data quality in <span>Airbnb</span> research,”</span> <em>International Journal of Contemporary Hospitality Management</em>, 36(3), pp. 812–832. doi: <a href="https://doi.org/10.1108/IJCHM-10-2022-1207">10.1108/IJCHM-10-2022-1207</a>.
+</div>
+<div id="ref-tslee_airbnbdata" class="csl-entry" role="listitem">
+Slee, T. (2024) <span>“Tomslee/airbnb-data-collection.”</span> Available at: <a href="https://github.com/tomslee/airbnb-data-collection">https://github.com/tomslee/airbnb-data-collection</a> (Accessed: December 15, 2024).
+</div>
+<div id="ref-airbnb_terms" class="csl-entry" role="listitem">
+<span>“Terms of <span>Service</span> - <span>Airbnb</span> <span>Help</span> <span>Centre</span>”</span> (no date). Available at: <a href="https://www.airbnb.co.uk/help/article/2908">https://www.airbnb.co.uk/help/article/2908</a> (Accessed: December 15, 2024).
+</div>
+<div id="ref-todd_2022" class="csl-entry" role="listitem">
+Todd, J., Musah, A. and Cheshire, J. (2022) <span>“Assessing the impacts of <span>Airbnb</span> listings on <span>London</span> house prices,”</span> <em>Environment and Planning B: Urban Analytics and City Science</em>, 49(1), pp. 206–222. doi: <a href="https://doi.org/10.1177/23998083211001836">10.1177/23998083211001836</a>.
+</div>
+</div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
