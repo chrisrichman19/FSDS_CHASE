@@ -1,6 +1,6 @@
 ---
-bibliography: CHASEref.bib
-csl: harvard-cite-them-right.csl
+bibliography: FSDS_CHASE-main/CHASEref.bib
+csl: FSDS_CHASE-main/harvard-cite-them-right.csl
 title: CHASE's Group Project
 execute:
   echo: false
@@ -120,6 +120,7 @@ os.remove(zip_path)
 ```
 
 ```{python}
+#| include: false
 def install_and_import(package):
     try:
         # Check if the package is already installed
@@ -140,7 +141,7 @@ destination = "London_Points_Of_Interest.gpkg"
 
 # Check if the file already exists
 if not os.path.exists(destination):
-    gdown.download(file_url, destination, quiet=False)
+    gdown.download(file_url, destination, quiet=True)
 ```
 
 ```{python}
@@ -149,24 +150,49 @@ if not os.path.exists(destination):
 # Download harvard-cite-them-right.csl
 ```
 
+## Declaration of Authorship {.unnumbered .unlisted}
+We, CHASE, pledge our honour that the work presented in this assessment is our own. Where information has been derived from other sources, we confirm that this has been indicated in the work. Where a Large Language Model such as ChatGPT has been used we confirm that we have made its contribution to the final submission clear.
+
+Date: 16 December 2024
+
+Student Numbers: 
+
+24223425
+
+24097459
+
+24081453 
+
+24217725
+
+22218425
+
+## Brief Group Reflection
+| What Went Well | What Was Challenging |
+| -------------- | -------------------- |
+| A              | B                    |
+| C              | D                    |
+## Priorities for Feedback
+Are there any areas on which you would appreciate more detailed feedback if we're able to offer it?
+
 ## 1. Who collected the InsideAirbnb data?
 
 
-The InsideAirbnb was collected by Murray Cox, Tom Slee, and a team of collaborators working to empower communities through data. Murray Cox is an Australian community artist, activist and photo- journalist who "uses data, media, and technology for social change" (@ia_about). (40)
+The InsideAirbnb was collected by Murray Cox, Tom Slee, and a team of collaborators working to empower communities through data. Murray Cox is an Australian community artist, activist and photo- journalist who "uses data, media, and technology for social change" (@ia_about). 
 
 
 ## 2. Why did they collect the InsideAirbnb data?
 
 
 
-Murray Cox and Tom Slee collected the InsideAirbnb data to critically assess the impact of Airbnb on housing markets, to provide unbiased independent publicly available data, and to facilitate the improved understanding of city authorities and regulatory bodies. Motivated by an observation of increasing entire-home listings and "multi-lister" hosts, Cox and Slee aimed to challenge Airbnb’s portrayal as a platform for casual home sharing, revealing that much of its revenue comes from commercial operators who are pushing out local residents by raising house prices (@carville_meet_2019). (84)
+Murray Cox and Tom Slee collected the InsideAirbnb data to critically assess the impact of Airbnb on housing markets, to provide unbiased independent publicly available data, and to facilitate the improved understanding of city authorities and regulatory bodies. Motivated by an observation of increasing entire-home listings and "multi-lister" hosts, Cox and Slee aimed to challenge Airbnb’s portrayal as a platform for casual home sharing, revealing that much of its revenue comes from commercial operators who are pushing out local residents by raising house prices (@carville_meet_2019). 
 
 ## 3. How did they collect it?
 
 Inside Airbnb’s data is collected through web-scraping, using public information from Airbnb's website. There were two main stages of data collection:
 Identify listings for chosen set of coordinates.
 Collect the following information for each listing: listing type, approximate address, number of reviews and average review score, capacity, numbers of bedrooms and bathrooms, price, and coordinates.
-Data is periodically scraped for each location from the Airbnb website (@adamiak_airbnb_2019, @ia_home). ()
+Data is periodically scraped for each location from the Airbnb website (@adamiak_airbnb_2019, @ia_home).
 
 
 ## 4. How does the method of collection (Q3) impact the completeness and/or accuracy of the InsideAirbnb data? How well does it represent the process it seeks to study, and what wider issues does this raise?
@@ -182,7 +208,7 @@ IA programmer (@tslee_airbnbdata) states that ‘no guarantees are made about th
 
 The IA data is therefore not ‘raw’, it is “verified, cleansed, analyzed and aggregated” @ia_home, meaning the data is biased. Cleaning and aggregation removes detail  and certain perspectives from the data. This erasure is especially significant when those working, processing and analysing the data are not aware of the context in which it was created (@dignazio_5_2020).
 
-Completeness and accuracy challenges raise the question of whether researchers should rely solely on data collected by one organisation, from one website, to analyse the impact of an industry. By focusing solely on the data provided by IA researchers will come to biased and partial conclusions that are influenced by the views of IA’s creators. (345)
+Completeness and accuracy challenges raise the question of whether researchers should rely solely on data collected by one organisation, from one website, to analyse the impact of an industry. By focusing solely on the data provided by IA researchers will come to biased and partial conclusions that are influenced by the views of IA’s creators. 
 
 
 ## 5. What ethical considerations does the use of the InsideAirbnb data raise? 
@@ -202,7 +228,7 @@ Another ethical issue is the accuracy of the data being provided. InsideAirbnb s
 
 As @mason_1986 explains, depending on how it is used, the data’s accuracy can raise ethical concerns. InsideAirbnb’s data is “used regularly over the last year by city analysts, journalists, academics and hospitality analysts” @cox_how_airbnb. The use of such data by city analysts will impact the lives of those that fall under the jurisdiction of the city authority, raising the ethical consideration of the data’s accuracy due to the harm that may be caused from the use of Inside Airbnb’s potentially misrepresentative data. This is of further concern when those analysing the data do not fully understand the process through which it has been collected and the limits this brings, causing potentially significant economic and societal impacts if InsideAirbnb’s data is not used mindfully.  
 
- @mason_1986 argues that accessibility is also an ethical concern when it comes to using data. Not everyone has the technologies required to access the data, and even fewer have the intellectual skills to interpret and process the InsideAirbnb data. @dignazio_5_2020 explain that differential power has a silencing effect and that quantitative data can leave people out. Whilst InsideAirbnb’s mission is to “work towards a vision where communities are empowered with data and information” (@ia_home), its capability to do so is limited if the communities it seeks to empower lack the means to make use of the available data. The lack in transfer of data science skills and knowledge to the communities that InsideAirbnb seek to represent, and subsequent reliance on external researchers, mean that the imbalances in education and power will not be sufficiently addressed since the communities’ reality will only ever be told through the partial perspective of said researchers. (540)
+ @mason_1986 argues that accessibility is also an ethical concern when it comes to using data. Not everyone has the technologies required to access the data, and even fewer have the intellectual skills to interpret and process the InsideAirbnb data. @dignazio_5_2020 explain that differential power has a silencing effect and that quantitative data can leave people out. Whilst InsideAirbnb’s mission is to “work towards a vision where communities are empowered with data and information” (@ia_home), its capability to do so is limited if the communities it seeks to empower lack the means to make use of the available data. The lack in transfer of data science skills and knowledge to the communities that InsideAirbnb seek to represent, and subsequent reliance on external researchers, mean that the imbalances in education and power will not be sufficiently addressed since the communities’ reality will only ever be told through the partial perspective of said researchers. 
 
 ## 6. With reference to the InsideAirbnb data (*i.e.* using numbers, figures, maps, and descriptive statistics), what does an analysis of Hosts and the types of properties that they list suggest about the nature of Airbnb lettings in London?
 
@@ -374,13 +400,6 @@ borough_counts["Percentage"] = (borough_counts["Airbnb_Counts"] / total_listings
 
 # Sort the counts by the percentage of listings
 borough_counts = borough_counts.sort_values(by="Percentage", ascending=False)
-
-# Print borough names with airbnb percentages - Used the results in the text (do not show in actual output)
-#print("Boroughs with Airbnb Percentages:")
-#print(borough_counts[["NAME", "Airbnb_Counts", "Percentage"]])
-
-# Save the result to a CSV file (optional)
-borough_counts.to_csv("airbnb_percentage_by_borough.csv", index=False)
 ```
 
 ### Properties Available for over 90+ Nights
@@ -405,13 +424,6 @@ borough_counts = (
 # Calculating the percentage of listings for each borough
 total_listings = borough_counts["Airbnb_Counts"].sum()
 borough_counts["Percentage"] = (borough_counts["Airbnb_Counts"] / total_listings) * 100
-
-# Displaying results - Used the results in the text (do not show in actual output)
-#print("Airbnb Listings Available for 90+ nights by Borough (With Percentage):")
-#print(borough_counts)
-
-# Displaying the total number of listings - Used the results in the text (do not show in actual output)
-#print(f"\nTotal Airbnb Listings Available for 90+ nights: {total_listings}")
 ```
 
 ```{python}
@@ -673,41 +685,6 @@ ward_airbnb.loc[ward_airbnb["Ward name"].isin(too_late["Ward name"]), "status"] 
 ward_airbnb.loc[ward_airbnb["Ward name"].isin(at_risk["Ward name"]), "status"] = (
     "at_risk"
 )
-```
-
-```{python}
-# Visualise at risk wards with a choropleth map
-fig, ax = plt.subplots(1, 1, figsize=(10, 8))
-ward_airbnb.plot(
-    column="status",
-    legend=True,
-    cmap="coolwarm",
-    ax=ax,
-    legend_kwds={"bbox_to_anchor": (1, 1)},
-)
-plt.title("Ward Status by Airbnb Density")
-
-# Add scale bar
-scalebar = ScaleBar(
-    1, location="lower left"
-)  # 1 is the length of one pixel, adjust based on map scale
-ax.add_artist(scalebar)
-
-# Add North Arrow
-x, y, arrow_length = 0.05, 0.98, 0.1
-ax.annotate(
-    "N",
-    xy=(x, y),
-    xytext=(x, y - arrow_length),
-    arrowprops=dict(facecolor="black", width=5, headwidth=15),
-    ha="center",
-    va="center",
-    fontsize=20,
-    xycoords=ax.transAxes,
-)
-
-boroughs.plot(edgecolor="lightgrey", linewidth=1, ax=ax, facecolor="none")
-plt.show()
 ```
 
 ### "At-Risk" Wards and Deprivation
