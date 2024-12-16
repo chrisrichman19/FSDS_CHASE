@@ -46,32 +46,6 @@ jupyter:
     name: base
 ---
 
-## Declaration of Authorship {.unnumbered .unlisted}
-
-We, CHASE, pledge our honour that the work presented in this assessment is our own. Where information has been derived from other sources, we confirm that this has been indicated in the work. Where a Large Language Model such as ChatGPT has been used we confirm that we have made its contribution to the final submission clear.
-
-Date: 16 December 2024
-
-Student Numbers: 
-24223425
-24097459
-24081453
-24217725
-22218425
-
-## Brief Group Reflection
-
-| What Went Well | What Was Challenging |
-| -------------- | -------------------- |
-| A              | B                    |
-| C              | D                    |
-
-## Priorities for Feedback
-
-Are there any areas on which you would appreciate more detailed feedback if we're able to offer it?
-
-{{< pagebreak >}}
-
 ```{python}
 #| echo: false
 # importing packages
