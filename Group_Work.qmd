@@ -56,7 +56,6 @@ import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
 import gdown
 from esda import Moran, Moran_Local
 from libpysal.weights import Queen
@@ -146,7 +145,7 @@ As @mason_1986 explains, depending on how it is used, the data’s accuracy can 
 ## 6. With reference to the InsideAirbnb data (*i.e.* using numbers, figures, maps, and descriptive statistics), what does an analysis of Hosts and the types of properties that they list suggest about the nature of Airbnb lettings in London? - Total 698 
 There is a possibility of making the base map of the airbnb density the price so that we save 150 words. So there wont be a bar graph of average price. 
 
-### Read in Data
+### Data Reading and Wrangling
 
 ```{python}
 # Reading Airbnb data
@@ -322,7 +321,7 @@ print(borough_counts[["NAME", "Airbnb_Counts", "Percentage"]])
 borough_counts.to_csv("airbnb_percentage_by_borough.csv", index=False)
 ```
 
-### Calculating the Average Price of Airbnb Listings in London Boroughs 
+### Calculating the Average Price of Airbnb Listings in London Boroughs
 
 ```{python}
 # Calculating the average price of Airbnb listings in each borough
@@ -368,7 +367,7 @@ plt.show()
 
 Westminster, Kensington and Chelsea, and the City of London exhibit the highest average prices, while Bexley and Harrow have the lowest, reflecting significant variation in short-term rental costs across the city.
 
-### Properties Available for over 90+ Nights 
+### Properties Available for over 90+ Nights
 
 A concern that Airbnb imposes in London is ‘commercialisation’. The Greater London Authority (GLA) states that “it creates a risk of residential properties being used as letting businesses without the required planning permission and protections for neighbours” (Cromarty, 2024, p.26). To avoid this issue, homeowners are required to obtain planning permission if they intend to use residential properties for short-term accommodation exceeding 90 nights.
 In the current 2024 analysis, we found that there is a total of 6254 listings available for over 90+ nights. Westminster has 15.7% of those listings, Kensington and Chelsea at 9%, and Tower Hamlets at 7.5%.
@@ -440,7 +439,7 @@ plt.show()
 
 The most common ‘room types’ available for over 90+ nights are entire homes and apartments.
 
-### Hosts with Multiple Listings 
+### Hosts with Multiple Listings
 
 GLA have discovered that hosts with multiple listings on Airbnb are more likely to be using the platform for commercial purposes (Cromarty, 2024, p.25). The total number of hosts with two or more listings is 6253 with the average number of listings per host being 7.06. The maximum number of listings is 1253 that belong to Sykes Holiday Cottages. This shows that the Airbnb market in London is commercialised and does not adhere to the GLA 90-night policy limit. 
 
@@ -495,6 +494,8 @@ Recently Active: Included listings with reviews in the past six months for curre
 Availability: Kept listings available at least 90 days annually to capture impactful activity.
 
 Room Type: Focused on “Entire home/apt” listings due to their greater effect on housing and neighbourhood dynamics.
+
+### Data Reading and Wrangling
 
 ```{python}
 # Filtering Data again as Q6 has other filters in place
@@ -603,8 +604,8 @@ ward_airbnb["airbnb_per_1000_household"] = (
 ) * 1000
 ```
 
-## Analysis 
-### Decision tree model: 
+### Analysis 
+#### Decision Tree Model 
 
 We chose a decision tree methodology for this analysis due to its high interpretability, making it easy for policymakers to understand how each ward was classified as “at-risk” or “too late”. Each classification decision the model makes can be easily traced in a simple, visual format.
 
@@ -743,11 +744,11 @@ boroughs.plot(edgecolor="lightgrey", linewidth=1, ax=ax, facecolor="none")
 plt.show()
 ```
 
-## "At-Risk" wards and deprivation:
+### "At-Risk" Wards and Deprivation
 
 To assess potential social impact of Airbnb in London, we analyzed the relationship between our Airbnb decision tree classifications and deprivation rank in wards. Deprivation rank is a relative measure comparing the level of deprivation across London wards. The lower the deprivation rank, the greater the deprivation score in the ward.
 
-## EDA:
+#### EDA
 
 ```{python}
 # List of variables to analyze
@@ -775,11 +776,11 @@ print(
 
 We begin with an exploratory data analysis of deprivation and ward classifications. The results shows the average deprivation rank between classification types. We see that the mean deprivation of “at-risk” wards is lower than “too-late” wards. This suggests that “at-risk” wards are not only desirable to Airbnb letters based on our classification, but are also particularly vulnerable to the negative impacts of Airbnb due to these areas being more deprived on average.
 
-### Spatial autocorrelation analysis:
+#### Spatial Autocorrelation Analysis
 
 The question of remains where overlaps between “at-risk” wards and high deprivation occur. Spatial autocorrelation analysis of deprivation in London wards was employed to assess the spatial distribution of deprived wards and examine which “at-risk” wards lie within high deprivation clusters. Cluster analysis improves the generalizability of the study by identifying patterns of deprivation beyond individual wards with arbitrary boundaries.
 
-## Moran's I:
+Moran's I:
 
 ```{python}
 # Create a spatial weights matrix based on Queen contiguity
@@ -805,7 +806,7 @@ print(f"p-value: {moran_p_value}")
 
 A Moran’s I test is conducted to establish that deprivation is not randomly distributed across wards in London. A Global Moran’s I statistic of 0.689 with a p-value less than 0.05 indicates there is statistically significant clustering of deprivation in London wards.
 
-## LISA
+LISA:
 
 ```{python}
 # Ensure the weights are row-standardized
