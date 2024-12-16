@@ -138,7 +138,7 @@ Murray Cox and Tom Slee collected the InsideAirbnb data to critically assess the
 Inside Airbnb’s data is collected through web-scraping, using public information from Airbnb's website. There were two main stages of data collection:
 Identify listings for chosen set of coordinates.
 Collect the following information for each listing: listing type, approximate address, number of reviews and average review score, capacity, numbers of bedrooms and bathrooms, price, and coordinates.
-Data is periodically scraped for each location from the Airbnb website adamiak_airbnb_2019, (@ia_home). ()
+Data is periodically scraped for each location from the Airbnb website (@adamiak_airbnb_2019, @ia_home). ()
 
 
 ## 4. How does the method of collection (Q3) impact the completeness and/or accuracy of the InsideAirbnb data? How well does it represent the process it seeks to study, and what wider issues does this raise?
@@ -150,7 +150,7 @@ Using IA’s data relies solely on the data of Airbnb which only provides an est
     
 As acknowledged by IA, listings’ geographic locations are not available, meaning that analysis must be aggregated to a higher level. This limits the ability to conduct detailed analysis of Airbnb’s effect on the housing market, as would be the case when conducting price analysis using distance to points of interest as explanatory variables (@todd_2022).
 
-IA programmer, Slee, T. (n.d.), states that ‘no guarantees are made about the quality of data obtained using this script, statistically or about an individual page,’ encouraging researchers to check validity on their own. Furthermore, the script was last updated in 2019 (@tslee_airbnbdata), potentially resulting in inaccurate listing counts following changes to Airbnb’s data structure, reducing the useability of the data to assess housing market impacts.
+IA programmer (@tslee_airbnbdata) states that ‘no guarantees are made about the quality of data obtained using this script, statistically or about an individual page,’ encouraging researchers to check validity on their own. Furthermore, the script was last updated in 2019 (@tslee_airbnbdata), potentially resulting in inaccurate listing counts following changes to Airbnb’s data structure, reducing the useability of the data to assess housing market impacts.
 
 The IA data is therefore not ‘raw’, it is “verified, cleansed, analyzed and aggregated” @ia_home, meaning the data is biased. Cleaning and aggregation removes detail  and certain perspectives from the data. This erasure is especially significant when those working, processing and analysing the data are not aware of the context in which it was created (@dignazio_5_2020).
 
@@ -168,7 +168,7 @@ The Terms of Service is contradictory to the robot.txt file- the former specifie
 
 The robot.txt file is however non-binding, so relies on the programmer’s adherence, which could cause harm to Airbnb’s users and customers if not followed.
 
-InsideAirbnb data is collected through web scraping, in contradiction to the Terms of Service, so despite the efforts taken by IA to anonymise the data, Airbnb users have not given their informed consent for any data to be collected in this way, nor have they consented to their data being used by third parties in this manner, raising ethical considerations over the use of data provided by @krotov_2020. 
+InsideAirbnb data is collected through web scraping, in contradiction to the Terms of Service, so despite the efforts taken by IA to anonymise the data, Airbnb users have not given their informed consent for any data to be collected in this way, nor have they consented to their data being used by third parties in this manner, raising ethical considerations over the use of data provided by IA (@krotov_2020).
 
 Another ethical issue is the accuracy of the data being provided. InsideAirbnb state that accuracy of the information compiled from the Airbnb site is not the responsibility of Inside Airbnb. Due care has been taken with any processing and analysis. - (@ia_home).
 
