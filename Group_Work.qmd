@@ -169,6 +169,16 @@ airbnb = gpd.GeoDataFrame(
 ```
 
 ```{python}
+# Ward geometry-data
+wards = gpd.read_file("FSDS_CHASE-main/data/London-wards-2011/London_Ward_CityMerged.shp").to_crs(
+    epsg=27700
+)[["GSS_CODE", "HECTARES", "geometry"]]
+boroughs = gpd.read_file(
+    "FSDS_CHASE-main/data/statistical-gis-boundaries-london/ESRI/London_Borough_Excluding_MHW.shp"
+).to_crs(epsg=27700)
+```
+
+```{python}
 # filtering Airbnb data
 from datetime import datetime, timedelta
 
@@ -282,16 +292,6 @@ ward_profiles = ward_profiles[
         "Number of Household spaces - 2011",
     ]
 ]
-```
-
-```{python}
-# Ward geometry-data
-wards = gpd.read_file("FSDS_CHASE-main/data/London-wards-2011/London_Ward_CityMerged.shp").to_crs(
-    epsg=27700
-)[["GSS_CODE", "HECTARES", "geometry"]]
-boroughs = gpd.read_file(
-    "FSDS_CHASE-main/data/statistical-gis-boundaries-london/ESRI/London_Borough_Excluding_MHW.shp"
-).to_crs(epsg=27700)
 ```
 
 ### Calculating Percent of Short-Term Listings per Borough
