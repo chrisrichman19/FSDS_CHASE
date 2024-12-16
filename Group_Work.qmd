@@ -612,7 +612,7 @@ The decision tree predicts whether a ward is likely to have high Airbnb density 
 
 **Neither**: Wards that don't fall into either category.
 
-We selected these variables as research has shown that higher-income neighborhoods, better transit access, and proximity to attractions significantly influence Airbnb activity @jiao_empirical_2020.
+We selected these variables as research has shown that higher-income neighborhoods, better transit access, and proximity to attractions significantly influence Airbnb activity (@jiao_empirical_2020).
 
 ```{python}
 # Calculate the 95th quantile for Airbnb density
@@ -896,13 +896,5 @@ The study concludes there are 9 wards “at-risk” of becoming heavily saturate
 ## Limitations
 
 Significant limitations to this study remain. We chose to use data from the 2014 London Ward Atlas in order to incorporate public transit accessibility into our analysis. However, this approach means that all other variables used from this dataset (i.e. house price and deprivation rank) are equally 10+ years outdated. Results from this study should be verified when updated accessibility scores for current wards become publicly available.  Additionally, a purely quantitate analysis cannot comprehensively capture lived experience and local context. Qualitative work in our specified wards would be valuable for gaining better insights to the impact of Airbnb in these areas.
-
-## Sustainable Authorship Tools
-
-Using the Terminal in Docker, you compile the Quarto report using `quarto render <group_submission_file>.qmd`.
-
-Your QMD file should automatically download your BibTeX and CLS files and any other required files. If this is done right after library loading then the entire report should output successfully.
-
-Written in Markdown and generated from [Quarto](https://quarto.org/). Fonts used: [Spectral](https://fonts.google.com/specimen/Spectral) (mainfont), [Roboto](https://fonts.google.com/specimen/Roboto) (<span style="font-family:Sans-Serif;">sansfont</span>) and [JetBrains Mono](https://fonts.google.com/specimen/JetBrains%20Mono) (`monofont`). 
 
 ## References
