@@ -66,19 +66,28 @@ from scipy import stats
 from shapely.geometry import Point
 from sklearn.metrics import confusion_matrix
 from sklearn.tree import DecisionTreeClassifier, plot_tree
+import zipfile
+import requests
 ```
 
 ```{python}
-#| echo: false
-host = "https://orca.casa.ucl.ac.uk"
-path = "~jreades/data"
-file = "20240614-London-listings.parquet"
+# GitHub repository URL (replace with the actual repository URL)
+repo_url = "https://github.com/chrisrichman19/FSDS_CHASE/archive/refs/heads/main.zip"
 
-if os.path.exists(file):
-    df = pd.read_parquet(file)
-else:
-    df = pd.read_parquet(f"{host}/{path}/{file}")
-    df.to_parquet(file)
+# Local destination for the ZIP file
+zip_path = "repo.zip"
+
+# Download the ZIP file
+response = requests.get(repo_url)
+with open(zip_path, "wb") as file:
+    file.write(response.content)
+
+# Extract the ZIP file
+with zipfile.ZipFile(zip_path, "r") as zip_ref:
+    zip_ref.extractall(".")
+
+# Remove the ZIP file
+os.remove(zip_path)
 ```
 
 ```{python}
@@ -150,7 +159,7 @@ There is a possibility of making the base map of the airbnb density the price so
 ```{python}
 # Reading Airbnb data
 
-airbnb = pd.read_csv("data/20240614-London-listings.csv.gz")
+airbnb = pd.read_csv("FSDS_CHASE-main/data/20240614-London-listings.csv.gz")
 
 airbnb = gpd.GeoDataFrame(
     airbnb,
@@ -256,7 +265,7 @@ plt.show()
 
 ```{python}
 # London Ward profiles
-ward_profiles = pd.read_csv("data/ward-profiles.csv", encoding="latin1")
+ward_profiles = pd.read_csv("FSDS_CHASE-main/data/ward-profiles.csv", encoding="latin1")
 
 # Including only selected variables
 ward_profiles = ward_profiles[
@@ -277,11 +286,11 @@ ward_profiles = ward_profiles[
 
 ```{python}
 # Ward geometry-data
-wards = gpd.read_file("data/London-wards-2011/London_Ward_CityMerged.shp").to_crs(
+wards = gpd.read_file("FSDS_CHASE-main/data/London-wards-2011/London_Ward_CityMerged.shp").to_crs(
     epsg=27700
 )[["GSS_CODE", "HECTARES", "geometry"]]
 boroughs = gpd.read_file(
-    "data/statistical-gis-boundaries-london/ESRI/London_Borough_Excluding_MHW.shp"
+    "FSDS_CHASE-main/data/statistical-gis-boundaries-london/ESRI/London_Borough_Excluding_MHW.shp"
 ).to_crs(epsg=27700)
 ```
 
@@ -914,4 +923,3 @@ Your QMD file should automatically download your BibTeX and CLS files and any ot
 Written in Markdown and generated from [Quarto](https://quarto.org/). Fonts used: [Spectral](https://fonts.google.com/specimen/Spectral) (mainfont), [Roboto](https://fonts.google.com/specimen/Roboto) (<span style="font-family:Sans-Serif;">sansfont</span>) and [JetBrains Mono](https://fonts.google.com/specimen/JetBrains%20Mono) (`monofont`). 
 
 ## References
-
