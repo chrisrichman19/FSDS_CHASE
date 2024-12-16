@@ -525,7 +525,6 @@ We filtered the Airbnb dataset to focus on listings most relevant to neighbourho
 
 - Room Type: Focused on “Entire home/apt” listings due to their greater effect on housing and neighbourhood dynamics.
 
-
 ```{python}
 # Filtering Data again (Q6 has other filters in place):
 
@@ -698,10 +697,6 @@ ward_airbnb.loc[ward_airbnb["Ward name"].isin(too_late["Ward name"]), "status"] 
 ward_airbnb.loc[ward_airbnb["Ward name"].isin(at_risk["Ward name"]), "status"] = (
     "at_risk"
 )
-
-
-ward_names = at_risk["Ward name"].tolist()
-print(f"These at-risk wards are: {', '.join(ward_names)}")
 ```
 
 ```{python}
