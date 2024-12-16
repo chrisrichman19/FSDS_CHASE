@@ -229,11 +229,9 @@ filtered_airbnb = filtered_airbnb[filtered_airbnb["availability_365"] >= 90]
 ```
 
 ### Distribution of Short-Term Listings per Borough with Average Price 
-Airbnb’s short-term listings are clustered in boroughs surrounding the City of London. 14.4% of listings occur in Westminster, followed by 8.1% in Kensington and Chelsea, then 7.5% in Camden.
-
-Westminster, Kensington and Chelsea, and the City of London exhibit the highest average prices, while Bexley and Harrow have the lowest, reflecting significant variation in short-term rental costs across the city.
 
 ```{python}
+# Creating a distribution of airbnb map with average price as colour base
 # Performing a spatial join to assign each Airbnb listing to a borough
 airbnb_in_boroughs = gpd.sjoin(filtered_airbnb, boroughs, how="inner", predicate="within")
 
@@ -299,6 +297,10 @@ plt.tight_layout()
 plt.show()
 ```
 
+Airbnb’s short-term listings are clustered in boroughs surrounding the City of London. 14.4% of listings occur in Westminster, followed by 8.1% in Kensington and Chelsea, then 7.5% in Camden.
+
+Westminster, Kensington and Chelsea, and the City of London exhibit the highest average prices, while Bexley and Harrow have the lowest, reflecting significant variation in short-term rental costs across the city.
+
 ```{python}
 # London Ward profiles:
 
@@ -322,7 +324,7 @@ ward_profiles = ward_profiles[
 ```
 
 ```{python}
-# Listing all Airbnb counts and calculating percentages
+# Listing all Airbnb counts and calculating percentages of airbnb listings in each borough. 
 # Performing spatial join to assign each Airbnb to a borough
 airbnb_in_boroughs = gpd.sjoin(
     filtered_airbnb, boroughs, how="inner", predicate="within"
@@ -345,9 +347,9 @@ borough_counts["Percentage"] = (borough_counts["Airbnb_Counts"] / total_listings
 # Sort the counts by the percentage of listings
 borough_counts = borough_counts.sort_values(by="Percentage", ascending=False)
 
-# Print the borough names with percentages
-print("Boroughs with Airbnb Percentages:")
-print(borough_counts[["NAME", "Airbnb_Counts", "Percentage"]])
+# Print borough names with airbnb percentages - Used the results in the text (do not show in actual output)
+#print("Boroughs with Airbnb Percentages:")
+#print(borough_counts[["NAME", "Airbnb_Counts", "Percentage"]])
 
 # Save the result to a CSV file (optional)
 borough_counts.to_csv("airbnb_percentage_by_borough.csv", index=False)
@@ -376,12 +378,12 @@ borough_counts = (
 total_listings = borough_counts["Airbnb_Counts"].sum()
 borough_counts["Percentage"] = (borough_counts["Airbnb_Counts"] / total_listings) * 100
 
-# Displaying results
-print("Airbnb Listings Available for 90+ nights by Borough (With Percentage):")
-print(borough_counts)
+# Displaying results - Used the results in the text (do not show in actual output)
+#print("Airbnb Listings Available for 90+ nights by Borough (With Percentage):")
+#print(borough_counts)
 
-# Displaying the total number of listings
-print(f"\nTotal Airbnb Listings Available for 90+ nights: {total_listings}")
+# Displaying the total number of listings - Used the results in the text (do not show in actual output)
+#print(f"\nTotal Airbnb Listings Available for 90+ nights: {total_listings}")
 ```
 
 ```{python}
@@ -396,9 +398,9 @@ print(f"Total Airbnb Listings Available for 90+ Nights: {total_properties}")
 room_type_counts = filtered_airbnb["room_type"].value_counts().reset_index()
 room_type_counts.columns = ["Room Type", "Count"]
 
-# Printing the room type counts
-print("\nRoom Types Available for 90+ Nights:")
-print(room_type_counts)
+# Printing the room type counts - Used the results in the text (do not show in actual output)
+#print("\nRoom Types Available for 90+ Nights:")
+#print(room_type_counts)
 
 # Plotting the room types as a bar graph
 plt.figure(figsize=(8, 6))
@@ -409,7 +411,7 @@ plt.bar(
     edgecolor="black",
 )
 
-# Adding titles and labels
+# Adding titles and labels 
 plt.title("Room Types Rented for 90+ Nights", fontsize=16)
 plt.xlabel("Room Type", fontsize=12)
 plt.ylabel("Number of Properties", fontsize=12)
