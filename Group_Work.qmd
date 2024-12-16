@@ -86,7 +86,7 @@ from scipy import stats
 from libpysal.weights import Queen
 from esda import Moran
 from esda import Moran_Local
-from matplotlib.patches import Patch
+import matplotlib.patches as mpatches
 from matplotlib.colors import ListedColormap
 from matplotlib_scalebar.scalebar import ScaleBar
 from sklearn.metrics import confusion_matrix
@@ -607,13 +607,13 @@ We chose a decision tree methodology for this analysis due to its high interpret
 
 The decision tree predicts whether a ward is likely to have high Airbnb density using ward-level characteristics of public transport accessibility, house prices, and point of interest density, which we then use to categorise each London ward into one of three groups:
 
-Too Late: Wards already heavily impacted by Airbnb, that are in the top 5% of airbnb's per 1000 households.
+**Too Late**: Wards already heavily impacted by Airbnb, that are in the top 5% of airbnb's per 1000 households.
 
-At Risk: Wards predicted to have high Airbnb density but do not meet the threshold.
+**At Risk**: Wards predicted to have high Airbnb density but do not meet the threshold.
 
-Neither: Wards that don't fall into either category.
+**Neither**: Wards that don't fall into either category.
 
-We selected these variables as research has shown that higher-income neighborhoods, better transit access, and proximity to attractions significantly influence Airbnb activity (Jiao and Bai, 2020).
+We selected these variables as research has shown that higher-income neighborhoods, better transit access, and proximity to attractions significantly influence Airbnb activity @jiao_empirical_2020.
 
 ```{python}
 # Calculate the 95th quantile for Airbnb density
@@ -653,9 +653,11 @@ plt.show()
 The decision tree model identifies two scenarios where a ward is predicted to have a high Airbnb density:
 
 Transport Accessibility score of more than 6.75 and a Median House Price of more than £477,000
-or
+
+**or**
 
 Transport Accessibility score of less than or equal to 6.75 and a point of interest density of more than 1.059 per hectare.
+
 The results suggest that high Airbnb density is linked to well-connected areas with above-average housing prices, though less connected areas can also attract Airbnb activity if they offer a high concentration of attractions and amenities.
 
 There are 9 wards that meet either of these conditions but do not exceed the ‘too late’ Airbnb density threshold, so we have categorised them as ‘at-risk’.
@@ -820,7 +822,7 @@ legend_labels = ['High-High', 'Low-High', 'Low-Low', 'High-Low']
 colors = custom_cmap(range(4))  # Get colors from the custom colormap
 
 # Add the custom legend to the plot
-legend_elements = [Patch(color=colors[i], label=legend_labels[i]) for i in range(4)]
+legend_elements = [mpatches.Patch(color=colors[i], label=legend_labels[i]) for i in range(4)]
 ax.legend(handles=legend_elements, title='LISA Cluster')
 
 # Add scale bar
