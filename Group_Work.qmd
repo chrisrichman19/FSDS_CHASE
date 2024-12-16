@@ -898,6 +898,13 @@ Local indicators of spatial autocorrelation (LISA) statistics allow us to visual
 
 The study concludes there are 9 wards “at-risk” of becoming heavily saturated by Airbnb. Furthermore, six of these wards are located within clusters of high deprivation. City policy should focus on better regulating and limiting Airbnbs in the the boroughs of Islington, Hackney, and Hammersmith and Fulham to mitigate the negative impacts of Airbnb on vulnerable populations.
 
+## Limitations
+
+- old data
+- predictive power of decision tree? unclear, need other tests/studies
+- deprivation broad measure, need better understanding which forms of deprivation most prevalent in chosen wards, for better context-specific policy
+- qualitative research/local knowledge to inform of local experience w/ airbnb 
+
 ## Sustainable Authorship Tools
 
 Using the Terminal in Docker, you compile the Quarto report using `quarto render <group_submission_file>.qmd`.
@@ -907,3 +914,4 @@ Your QMD file should automatically download your BibTeX and CLS files and any ot
 Written in Markdown and generated from [Quarto](https://quarto.org/). Fonts used: [Spectral](https://fonts.google.com/specimen/Spectral) (mainfont), [Roboto](https://fonts.google.com/specimen/Roboto) (<span style="font-family:Sans-Serif;">sansfont</span>) and [JetBrains Mono](https://fonts.google.com/specimen/JetBrains%20Mono) (`monofont`). 
 
 ## References
+
