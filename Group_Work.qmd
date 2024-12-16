@@ -92,6 +92,7 @@ os.remove(zip_path)
 ```
 
 ```{python}
+#| include: false
 def install_and_import(package):
     try:
         # Check if the package is already installed
@@ -112,7 +113,7 @@ destination = "London_Points_Of_Interest.gpkg"
 
 # Check if the file already exists
 if not os.path.exists(destination):
-    gdown.download(file_url, destination, quiet=False)
+    gdown.download(file_url, destination, quiet=True)
 ```
 
 ```{python}
