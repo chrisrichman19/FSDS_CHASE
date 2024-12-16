@@ -21,7 +21,7 @@ format:
         \addtokomafont{disposition}{\rmfamily}
     mainfont: Spectral
     sansfont: Roboto Flex
-    monofont: InputMonoCondensed
+    monofont: Liberation Mono
     papersize: a4
     geometry:
       - top=25mm
@@ -49,59 +49,61 @@ jupyter:
 ```{python}
 #| echo: false
 import os
+
 import pandas as pd
 ```
 
 ```{python}
 #| echo: false
-host = 'https://orca.casa.ucl.ac.uk'
-path = '~jreades/data'
-file = '20240614-London-listings.parquet'
+host = "https://orca.casa.ucl.ac.uk"
+path = "~jreades/data"
+file = "20240614-London-listings.parquet"
 
 if os.path.exists(file):
-  df = pd.read_parquet(file)
-else: 
-  df = pd.read_parquet(f'{host}/{path}/{file}')
-  df.to_parquet(file)
+    df = pd.read_parquet(file)
+else:
+    df = pd.read_parquet(f"{host}/{path}/{file}")
+    df.to_parquet(file)
 ```
 
 ## 1. Who collected the InsideAirbnb data?
 
 ::: {.duedate}
 
-( 2 points; Answer due Week 7 )
+The InsideAirbnb was collected by Murray Cox, Tom Slee, and a team of collaborators working to empower communities through data. Murray Cox is an Australian community artist, activist and photo- journalist who "uses data, media, and technology for social change" @ia_about. (40)
 
 :::
-
-An inline citation example: As discussed on @insideairbnb, there are many...
-
-A parenthetical citation example: There are many ways to research Airbnb [see, for example, @insideairbnb]... 
 
 ## 2. Why did they collect the InsideAirbnb data?
 
 ::: {.duedate}
 
-( 4 points; Answer due Week 7 )
+Murray Cox and Tom Slee collected the InsideAirbnb data to critically assess the impact of Airbnb on housing markets, to provide unbiased independent publicly available data, and to facilitate the improved understanding of city authorities and regulatory bodies. Motivated by an observation of increasing entire-home listings and "multi-lister" hosts, Cox and Slee aimed to challenge Airbnb’s portrayal as a platform for casual home sharing, revealing that much of its revenue comes from commercial operators who are pushing out local residents by raising house prices @carville_meet_2019. (84)
 
 :::
 
 ```{python}
 #| output: asis
-print(f"One of way to embed output in the text looks like this: after cleaning, we were left with {df.shape[0]:,} rows of data.")
+print(
+    f"One of way to embed output in the text looks like this: after cleaning, we were left with {df.shape[0]:,} rows of data."
+)
 ```
 
 This way is also supposed to work (`{python} f"{df.shape[0]:,}" `) but I've found it less reliable.
 
 ```{python}
-ax = df.host_listings_count.plot.hist(bins=50);
-ax.set_xlim([0,500]);
+ax = df.host_listings_count.plot.hist(bins=50)
+ax.set_xlim([0, 500]);
 ```
 
 ## 3. How did they collect it?
 
 ::: {.duedate}
 
-( 5 points; Answer due Week 8 )
+Inside Airbnb’s data is collected through web-scraping, using public information from Airbnb's website. There were two main stages of data collection:
+Identify listings for chosen set of coordinates.
+Collect the following information for each listing: listing type, approximate address, number of reviews and average review score, capacity, numbers of bedrooms and bathrooms, price, and coordinates.
+Data is periodically scraped for each location from the Airbnb website adamiak_airbnb_2019, @ia_home. ()
 
 :::
 
@@ -109,7 +111,17 @@ ax.set_xlim([0,500]);
 
 ::: {.duedate}
 
-( 11 points; Answer due Week 9 )
+Inside Airbnb (IA) data is limited as scraping can only take place using publicly available data; that which is allowed in Airbnb’s robots.txt file. Datasets are therefore only an approximation of the Airbnb market and might not be suitable for use by those requiring more detailed understanding of Airbnb’s effect on housing markets eg. policymakers.	
+
+Using IA’s data relies solely on the data of Airbnb which only provides an estimation of the short term rental market. Some listings may be booked directly with hosts to avoid Airbnb’s additional charges, and therefore might appear unavailable on Airbnb, but are actually booked; distorting the true effect of Airbnb on the housing market @prentice_2023.
+    
+As acknowledged by IA, listings’ geographic locations are not available, meaning that analysis must be aggregated to a higher level. This limits the ability to conduct detailed analysis of Airbnb’s effect on the housing market, as would be the case when conducting price analysis using distance to points of interest as explanatory variables @todd_2022.
+
+IA programmer, Slee, T. (n.d.), states that ‘no guarantees are made about the quality of data obtained using this script, statistically or about an individual page,’ encouraging researchers to check validity on their own. Furthermore, the script was last updated in 2019 @tslee_airbnbdata, potentially resulting in inaccurate listing counts following changes to Airbnb’s data structure, reducing the useability of the data to assess housing market impacts.
+
+The IA data is therefore not ‘raw’, it is “verified, cleansed, analyzed and aggregated” @ia_home, meaning the data is biased. Cleaning and aggregation removes detail  and certain perspectives from the data. This erasure is especially significant when those working, processing and analysing the data are not aware of the context in which it was created @dignazio_5_2020.
+
+Completeness and accuracy challenges raise the question of whether researchers should rely solely on data collected by one organisation, from one website, to analyse the impact of an industry. By focusing solely on the data provided by IA researchers will come to biased and partial conclusions that are influenced by the views of IA’s creators. (345)
 
 :::
 
@@ -117,7 +129,21 @@ ax.set_xlim([0,500]);
 
 ::: {.duedate}
 
-( 18 points; Answer due {{< var assess.group-date >}} )
+Terms of Service outline the contract through which users and Airbnb interact, specifying users must not scrape or use scrapers or crawlers to access or collect data @airbnb_terms.
+
+From the perspective of an Airbnb user, having agreed to the Terms of Service, they expect that their data is protected. However, as InsideAirbnb demonstrates, these agreements do not guarantee that data will not be collected. Instead, Airbnb are relying on the conscience of the programmers to adhere to the Terms of Service and robot.txt files to guarantee privacy to their users. 
+
+The Terms of Service is contradictory to the robot.txt file- the former specifies not scraping data at all, the latter could be considered as permission to scrape certain data by explicitly prohibiting access to other data.
+
+The robot.txt file is however non-binding, so relies on the programmer’s adherence, which could cause harm to Airbnb’s users and customers if not followed.
+
+InsideAirbnb data is collected through web scraping, in contradiction to the Terms of Service, so despite the efforts taken by IA to anonymise the data, Airbnb users have not given their informed consent for any data to be collected in this way, nor have they consented to their data being used by third parties in this manner, raising ethical considerations over the use of data provided by @krotov_2020. 
+
+Another ethical issue is the accuracy of the data being provided. InsideAirbnb state that accuracy of the information compiled from the Airbnb site is not the responsibility of Inside Airbnb. Due care has been taken with any processing and analysis. - @ia_home.
+
+As @mason_1986 explains, depending on how it is used, the data’s accuracy can raise ethical concerns. InsideAirbnb’s data is “used regularly over the last year by city analysts, journalists, academics and hospitality analysts” @cox_how_airbnb. The use of such data by city analysts will impact the lives of those that fall under the jurisdiction of the city authority, raising the ethical consideration of the data’s accuracy due to the harm that may be caused from the use of Inside Airbnb’s potentially misrepresentative data. This is of further concern when those analysing the data do not fully understand the process through which it has been collected and the limits this brings, causing potentially significant economic and societal impacts if InsideAirbnb’s data is not used mindfully.  
+
+ @mason_1986 argues that accessibility is also an ethical concern when it comes to using data. Not everyone has the technologies required to access the data, and even fewer have the intellectual skills to interpret and process the InsideAirbnb data. @dignazio_5_2020 explain that differential power has a silencing effect and that quantitative data can leave people out. Whilst InsideAirbnb’s mission is to “work towards a vision where communities are empowered with data and information” @ia_home, its capability to do so is limited if the communities it seeks to empower lack the means to make use of the available data. The lack in transfer of data science skills and knowledge to the communities that InsideAirbnb seek to represent, and subsequent reliance on external researchers, mean that the imbalances in education and power will not be sufficiently addressed since the communities’ reality will only ever be told through the partial perspective of said researchers. (540)
 
 :::
 
