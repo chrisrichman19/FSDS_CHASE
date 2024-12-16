@@ -404,7 +404,7 @@ filtered_airbnb = filtered_airbnb[filtered_airbnb["availability_365"] >= 90]
 
 # Total number of listings
 total_properties = len(filtered_airbnb)
-print(f"Total Airbnb Listings Available for 90+ Nights: {total_properties}")
+#print(f"Total Airbnb Listings Available for 90+ Nights: {total_properties}")
 
 # Grouping by room type to count properties rented for 90+ nights
 room_type_counts = filtered_airbnb["room_type"].value_counts().reset_index()
@@ -438,8 +438,6 @@ plt.show()
 ```
 
 The most common ‘room types’ available for over 90+ nights are entire homes and apartments.
-
-### Hosts with Multiple Listings
 
 GLA have discovered that hosts with multiple listings on Airbnb are more likely to be using the platform for commercial purposes (@balogun_2024, 2024, p.25). The total number of hosts with two or more listings is 6253 with the average number of listings per host being 7.06. The maximum number of listings is 1253 that belong to Sykes Holiday Cottages. This shows that the Airbnb market in London is commercialised and does not adhere to the GLA 90-night policy limit. 
 
