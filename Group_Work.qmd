@@ -1,7 +1,7 @@
 ---
 bibliography: CHASEref.bib
 csl: harvard-cite-them-right.csl
-title: Group Name's Group Project
+title: CHASE's Group Project
 execute:
   echo: false
   freeze: true
@@ -73,23 +73,22 @@ else:
 ```
 
 ```{python}
-#importing packages 
-import pandas as pd
+# importing packages
 import geopandas as gpd
-from shapely.geometry import Point
-from sklearn.tree import DecisionTreeClassifier, plot_tree
-import matplotlib.pyplot as plt
-from matplotlib.offsetbox import AnchoredText
-import numpy as np
-import seaborn as sns
-from scipy import stats
-from libpysal.weights import Queen
-from esda import Moran
-from esda import Moran_Local
 import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from esda import Moran, Moran_Local
+from libpysal.weights import Queen
 from matplotlib.colors import ListedColormap
+from matplotlib.offsetbox import AnchoredText
 from matplotlib_scalebar.scalebar import ScaleBar
+from scipy import stats
+from shapely.geometry import Point
 from sklearn.metrics import confusion_matrix
+from sklearn.tree import DecisionTreeClassifier, plot_tree
 ```
 
 ## 1. Who collected the InsideAirbnb data?
@@ -103,20 +102,6 @@ The InsideAirbnb was collected by Murray Cox, Tom Slee, and a team of collaborat
 
 
 Murray Cox and Tom Slee collected the InsideAirbnb data to critically assess the impact of Airbnb on housing markets, to provide unbiased independent publicly available data, and to facilitate the improved understanding of city authorities and regulatory bodies. Motivated by an observation of increasing entire-home listings and "multi-lister" hosts, Cox and Slee aimed to challenge Airbnb’s portrayal as a platform for casual home sharing, revealing that much of its revenue comes from commercial operators who are pushing out local residents by raising house prices @carville_meet_2019. (84)
-
-```{python}
-#| output: asis
-print(
-    f"One of way to embed output in the text looks like this: after cleaning, we were left with {df.shape[0]:,} rows of data."
-)
-```
-
-This way is also supposed to work (`{python} f"{df.shape[0]:,}" `) but I've found it less reliable.
-
-```{python}
-ax = df.host_listings_count.plot.hist(bins=50)
-ax.set_xlim([0, 500]);
-```
 
 ## 3. How did they collect it?
 
@@ -162,59 +147,89 @@ As @mason_1986 explains, depending on how it is used, the data’s accuracy can 
  @mason_1986 argues that accessibility is also an ethical concern when it comes to using data. Not everyone has the technologies required to access the data, and even fewer have the intellectual skills to interpret and process the InsideAirbnb data. @dignazio_5_2020 explain that differential power has a silencing effect and that quantitative data can leave people out. Whilst InsideAirbnb’s mission is to “work towards a vision where communities are empowered with data and information” @ia_home, its capability to do so is limited if the communities it seeks to empower lack the means to make use of the available data. The lack in transfer of data science skills and knowledge to the communities that InsideAirbnb seek to represent, and subsequent reliance on external researchers, mean that the imbalances in education and power will not be sufficiently addressed since the communities’ reality will only ever be told through the partial perspective of said researchers. (540)
 
 ```{python}
-# Reading Airbnb data 
+# Reading Airbnb data
 
 airbnb = pd.read_csv("data/20240614-London-listings.csv.gz")
 
-airbnb = gpd.GeoDataFrame(airbnb, 
-                       geometry=gpd.points_from_xy(airbnb.longitude, airbnb.latitude), 
-                       crs="EPSG:4326").to_crs(epsg=27700)
+airbnb = gpd.GeoDataFrame(
+    airbnb,
+    geometry=gpd.points_from_xy(airbnb.longitude, airbnb.latitude),
+    crs="EPSG:4326",
+).to_crs(epsg=27700)
 ```
 
 ```{python}
-#filtering Airbnb data 
+# filtering Airbnb data
 from datetime import datetime, timedelta
 
 # Filter min. nights
-filtered_airbnb=airbnb[airbnb.minimum_nights<=30]
+filtered_airbnb = airbnb[airbnb.minimum_nights <= 30]
 
 ## To determine recently active sites
 
 # Convert 'last_review' to datetime format
-filtered_airbnb.loc[:, 'last_review'] = pd.to_datetime(filtered_airbnb['last_review'], errors='coerce')
+filtered_airbnb.loc[:, "last_review"] = pd.to_datetime(
+    filtered_airbnb["last_review"], errors="coerce"
+)
 
 # Set the reference date (for reproducibility)
 reference_date = datetime(2024, 11, 28)
 
 # Calculate the threshold date (6 months before the reference date)
-six_months_ago = reference_date - timedelta(days=6 * 30) 
+six_months_ago = reference_date - timedelta(days=6 * 30)
 
 # Filter the data
-filtered_airbnb = filtered_airbnb[filtered_airbnb['last_review'] >= six_months_ago]
+filtered_airbnb = filtered_airbnb[filtered_airbnb["last_review"] >= six_months_ago]
 
-filtered_airbnb = filtered_airbnb[filtered_airbnb['availability_365'] >= 90]
+filtered_airbnb = filtered_airbnb[filtered_airbnb["availability_365"] >= 90]
 ```
 
 ```{python}
-#London Ward profiles 
+# London Ward profiles
 ward_profiles = pd.read_csv("data/ward-profiles.csv", encoding="latin1")
 
 # Including only selected variables
-ward_profiles = ward_profiles[['Ward name', 'New code','Average Public Transport Accessibility score - 2014','Median House Price (£) - 2014','Median Household income estimate (2012/13)','(ID2010) - Rank of average score (within London) - 2010','(ID2010) % of LSOAs in worst 50% nationally - 2010','Average GCSE capped point scores - 2014',
-    '% BAME - 2011','Number of Household spaces - 2011']]
+ward_profiles = ward_profiles[
+    [
+        "Ward name",
+        "New code",
+        "Average Public Transport Accessibility score - 2014",
+        "Median House Price (£) - 2014",
+        "Median Household income estimate (2012/13)",
+        "(ID2010) - Rank of average score (within London) - 2010",
+        "(ID2010) % of LSOAs in worst 50% nationally - 2010",
+        "Average GCSE capped point scores - 2014",
+        "% BAME - 2011",
+        "Number of Household spaces - 2011",
+    ]
+]
 ```
 
 ```{python}
-# Ward geometry-data 
-wards = gpd.read_file("data/London-wards-2011/London_Ward_CityMerged.shp").to_crs(epsg=27700)[["GSS_CODE","HECTARES","geometry"]]
-boroughs = gpd.read_file("data/statistical-gis-boundaries-london/ESRI/London_Borough_Excluding_MHW.shp").to_crs(epsg=27700)
+# Ward geometry-data
+wards = gpd.read_file("data/London-wards-2011/London_Ward_CityMerged.shp").to_crs(
+    epsg=27700
+)[["GSS_CODE", "HECTARES", "geometry"]]
+boroughs = gpd.read_file(
+    "data/statistical-gis-boundaries-london/ESRI/London_Borough_Excluding_MHW.shp"
+).to_crs(epsg=27700)
 
 inner_london_boroughs = [
-    'Camden', 'Greenwich', 'Hackney', 'Hammersmith and Fulham', 'Islington', 
-    'Kensington and Chelsea', 'Lambeth', 'Lewisham', 'Southwark', 'Tower Hamlets', 
-    'Wandsworth', 'Westminster', 'City of London'
+    "Camden",
+    "Greenwich",
+    "Hackney",
+    "Hammersmith and Fulham",
+    "Islington",
+    "Kensington and Chelsea",
+    "Lambeth",
+    "Lewisham",
+    "Southwark",
+    "Tower Hamlets",
+    "Wandsworth",
+    "Westminster",
+    "City of London",
 ]
-inner_boroughs = boroughs[boroughs['NAME'].isin(inner_london_boroughs)]
+inner_boroughs = boroughs[boroughs["NAME"].isin(inner_london_boroughs)]
 ```
 
 ## 6. With reference to the InsideAirbnb data (*i.e.* using numbers, figures, maps, and descriptive statistics), what does an analysis of Hosts and the types of properties that they list suggest about the nature of Airbnb lettings in London? - Total 698 
@@ -222,10 +237,14 @@ There is a possibility of making the base map of the airbnb density the price so
 
 ```{python}
 # Perform spatial join to assign each Airbnb to a borough
-airbnb_in_boroughs = gpd.sjoin(filtered_airbnb, boroughs, how="inner", predicate="within")
+airbnb_in_boroughs = gpd.sjoin(
+    filtered_airbnb, boroughs, how="inner", predicate="within"
+)
 
 # Counting the number of Airbnb listings in each borough
-borough_counts = airbnb_in_boroughs.groupby("NAME").size().reset_index(name="Airbnb_Counts")
+borough_counts = (
+    airbnb_in_boroughs.groupby("NAME").size().reset_index(name="Airbnb_Counts")
+)
 
 # Merging the counts back with the boroughs GeoDataFrame
 boroughs = boroughs.merge(borough_counts, left_on="NAME", right_on="NAME", how="left")
@@ -243,7 +262,7 @@ choropleth = boroughs.plot(
     legend=True,
     edgecolor="black",
     linewidth=0.5,
-    ax=ax
+    ax=ax,
 )
 
 # Resizing and customizing the colourbar legend
@@ -254,23 +273,29 @@ colorbar.text(1.3, -0.01, "Low", fontsize=10, transform=ax.transAxes, ha="center
 
 # Plotting Airbnb points on top
 filtered_airbnb.plot(
-    ax=ax,
-    color="blue",
-    markersize=5,
-    alpha=0.5,
-    label="Airbnb Listings"
+    ax=ax, color="blue", markersize=5, alpha=0.5, label="Airbnb Listings"
 )
 
 # Addding a north arrow to the top-left corner
-north_arrow = AnchoredText("N ↑", loc="upper left", prop=dict(size=15), frameon=False, borderpad=1)
+north_arrow = AnchoredText(
+    "N ↑", loc="upper left", prop=dict(size=15), frameon=False, borderpad=1
+)
 ax.add_artist(north_arrow)
 
 # Customizing the legend and placeing it on the right
 airbnb_patch = mpatches.Patch(color="blue", label="Airbnb Listings")
-legend = ax.legend(handles=[airbnb_patch], title="Legend", fontsize=12, loc="upper right", title_fontsize=13)
+legend = ax.legend(
+    handles=[airbnb_patch],
+    title="Legend",
+    fontsize=12,
+    loc="upper right",
+    title_fontsize=13,
+)
 
 # Adding title and labels
-plt.title("Distribution of Short Term Airbnb Listings in London Boroughs(2024)", fontsize=16)
+plt.title(
+    "Distribution of Short Term Airbnb Listings in London Boroughs(2024)", fontsize=16
+)
 ax.set_xlabel("Longitude", fontsize=12)
 ax.set_ylabel("Latitude", fontsize=12)
 
@@ -284,10 +309,14 @@ Airbnb’s short-term listings are clustered in boroughs surrounding the City of
 ```{python}
 # Listing all Airbnb counts and calculating percentages
 # Performing spatial join to assign each Airbnb to a borough
-airbnb_in_boroughs = gpd.sjoin(filtered_airbnb, boroughs, how="inner", predicate="within")
+airbnb_in_boroughs = gpd.sjoin(
+    filtered_airbnb, boroughs, how="inner", predicate="within"
+)
 
 # Count the number of Airbnb listings in each borough
-borough_counts = airbnb_in_boroughs.groupby("NAME").size().reset_index(name="Airbnb_Counts")
+borough_counts = (
+    airbnb_in_boroughs.groupby("NAME").size().reset_index(name="Airbnb_Counts")
+)
 
 # Fill NaN values with 0 in case of missing boroughs
 borough_counts = borough_counts.fillna(0)
@@ -313,7 +342,9 @@ borough_counts.to_csv("airbnb_percentage_by_borough.csv", index=False)
 
 ```{python}
 # Calculating the average price of Airbnb listings in each borough
-borough_prices = airbnb_in_boroughs.groupby("NAME")["price"].mean().reset_index(name="Average_Price")
+borough_prices = (
+    airbnb_in_boroughs.groupby("NAME")["price"].mean().reset_index(name="Average_Price")
+)
 
 # Rounding the average price to whole numbers
 borough_prices["Average_Price"] = borough_prices["Average_Price"].round(0)
@@ -327,7 +358,12 @@ print(borough_prices.head())
 
 # Plotting the average price as a bar graph
 plt.figure(figsize=(12, 8))
-plt.bar(borough_prices["NAME"], borough_prices["Average_Price"], color="skyblue", edgecolor="black")
+plt.bar(
+    borough_prices["NAME"],
+    borough_prices["Average_Price"],
+    color="skyblue",
+    edgecolor="black",
+)
 
 # Adding titles and labels
 plt.title("Average Price of Airbnb Listings in London Boroughs (2024)", fontsize=16)
@@ -342,7 +378,7 @@ for i, value in enumerate(borough_prices["Average_Price"]):
 # Adjusting layout for better appearance
 plt.tight_layout()
 
-# Showing the output 
+# Showing the output
 plt.show()
 ```
 
@@ -355,13 +391,17 @@ In the current 2024 analysis, we found that there is a total of 6254 listings av
 
 ```{python}
 # Filtering listings for 90+ nights of availability
-filtered_airbnb = filtered_airbnb[filtered_airbnb['maximum_nights'] >= 90]
+filtered_airbnb = filtered_airbnb[filtered_airbnb["maximum_nights"] >= 90]
 
 # Performing a spatial join to assign each Airbnb to a borough
-airbnb_in_boroughs = gpd.sjoin(filtered_airbnb, boroughs, how="inner", predicate="within")
+airbnb_in_boroughs = gpd.sjoin(
+    filtered_airbnb, boroughs, how="inner", predicate="within"
+)
 
 # Counting the number of Airbnb listings in each borough
-borough_counts = airbnb_in_boroughs.groupby("NAME").size().reset_index(name="Airbnb_Counts")
+borough_counts = (
+    airbnb_in_boroughs.groupby("NAME").size().reset_index(name="Airbnb_Counts")
+)
 
 # Calculating the percentage of listings for each borough
 total_listings = borough_counts["Airbnb_Counts"].sum()
@@ -377,7 +417,7 @@ print(f"\nTotal Airbnb Listings Available for 90+ nights: {total_listings}")
 
 ```{python}
 # Filtering listings for 90+ nights of availability
-filtered_airbnb = filtered_airbnb[filtered_airbnb['availability_365'] >= 90]
+filtered_airbnb = filtered_airbnb[filtered_airbnb["availability_365"] >= 90]
 
 # Total number of listings
 total_properties = len(filtered_airbnb)
@@ -393,7 +433,12 @@ print(room_type_counts)
 
 # Plotting the room types as a bar graph
 plt.figure(figsize=(8, 6))
-plt.bar(room_type_counts["Room Type"], room_type_counts["Count"], color="orange", edgecolor="black")
+plt.bar(
+    room_type_counts["Room Type"],
+    room_type_counts["Count"],
+    color="orange",
+    edgecolor="black",
+)
 
 # Adding titles and labels
 plt.title("Room Types Rented for 90+ Nights", fontsize=16)
@@ -420,9 +465,11 @@ GLA have discovered that hosts with multiple listings on Airbnb are more likely 
 hosts_with_2plus_listings = airbnb[airbnb["host_listings_count"] >= 2]
 
 # Group by host_name and aggregate total listings
-hosts_summary = hosts_with_2plus_listings.groupby("host_name").agg(
-    total_listings=("host_listings_count", "first")
-).reset_index()
+hosts_summary = (
+    hosts_with_2plus_listings.groupby("host_name")
+    .agg(total_listings=("host_listings_count", "first"))
+    .reset_index()
+)
 
 # Calculate required metrics
 total_hosts = hosts_summary.shape[0]
@@ -448,12 +495,14 @@ print(host_with_max_listings)
 State of airbnb in london
 
 Already a shit ton of airbnbs in london
+
 Draw on q6
+
 Airbnb has the potential to exacerbate the affordable housing crisis in London by reducing the availability of long-term rentals. The impact of Airbnb is of particular concern with regard to deprived households, whereby increased housing costs can contribute to displacement, making it more difficult for these residents to remain in their communities.
 
 Our analysis aims to answer the following questions: What wards are “at risk” of becoming an Airbnb hotspot? Of these wards, which are also the most vulnerable to the negative social impacts of Airbnb?
 
-We cleaned the Airbnb dataset to focus on listings most relevant to neighbourhood impacts:
+We filtered the Airbnb dataset to focus on listings most relevant to neighbourhood impacts:
 
 Minimum Nights: Excluded stays over 30 nights to target short-term rentals.
 
@@ -468,32 +517,35 @@ Room Type: Focused on “Entire home/apt” listings due to their greater effect
 from datetime import datetime, timedelta
 
 # Filter min. nights
-filtered_airbnb=airbnb[airbnb.minimum_nights<=30]
+filtered_airbnb = airbnb[airbnb.minimum_nights <= 30]
 
 ## To determine recently active sites
 
 # Convert 'last_review' to datetime format
-filtered_airbnb.loc[:, 'last_review'] = pd.to_datetime(filtered_airbnb['last_review'], errors='coerce')
+filtered_airbnb.loc[:, "last_review"] = pd.to_datetime(
+    filtered_airbnb["last_review"], errors="coerce"
+)
 
 # Set the reference date (for reproducibility)
 reference_date = datetime(2024, 11, 28)
 
 # Calculate the threshold date (6 months before the reference date)
-six_months_ago = reference_date - timedelta(days=6 * 30) 
+six_months_ago = reference_date - timedelta(days=6 * 30)
 
 # Filter the data
-filtered_airbnb = filtered_airbnb[filtered_airbnb['last_review'] >= six_months_ago]
+filtered_airbnb = filtered_airbnb[filtered_airbnb["last_review"] >= six_months_ago]
 
-filtered_airbnb = filtered_airbnb[filtered_airbnb['availability_365'] >= 90]
+filtered_airbnb = filtered_airbnb[filtered_airbnb["availability_365"] >= 90]
 
-filtered_airbnb = filtered_airbnb[filtered_airbnb['room_type'] == "Entire home/apt"]
+filtered_airbnb = filtered_airbnb[filtered_airbnb["room_type"] == "Entire home/apt"]
 ```
 
 ```{python}
-# Reading in Point of Interest data 
+# Reading in Point of Interest data
+import importlib.util
 import subprocess
 import sys
-import importlib.util
+
 
 def install_and_import(package):
     try:
@@ -506,14 +558,16 @@ def install_and_import(package):
     except Exception as e:
         print(f"An error occurred while checking or installing {package}: {e}")
 
+
 install_and_import("gdown")
 
-#Link incase this does not work: https://drive.google.com/uc?id=1Abf3I-ez_imd3hzAAmPu8UGcU8dH9lWK
+# Link incase this does not work: https://drive.google.com/uc?id=1Abf3I-ez_imd3hzAAmPu8UGcU8dH9lWK
 ```
 
 ```{python}
-import gdown
 import os
+
+import gdown
 
 # Google Drive file URL and local file destination
 file_url = "https://drive.google.com/uc?id=1Abf3I-ez_imd3hzAAmPu8UGcU8dH9lWK"
@@ -533,28 +587,40 @@ print(f"File size: {os.path.getsize(destination)} bytes")
 gdf = gpd.read_file(destination)
 
 # Selecting pubs, restaurants, cafes
-desired_classes = ["Pubs, Bars and Inns", "Cafes, Snack Bars and Tea Rooms", "Restaurants"]
-poi_data = gdf[gdf['classname'].isin(desired_classes)]
+desired_classes = [
+    "Pubs, Bars and Inns",
+    "Cafes, Snack Bars and Tea Rooms",
+    "Restaurants",
+]
+poi_data = gdf[gdf["classname"].isin(desired_classes)]
 ```
 
 ```{python}
-#Merging files together
-ward_airbnb = wards.merge(ward_profiles, left_on = "GSS_CODE", right_on = "New code", how = "left")
+# Merging files together
+ward_airbnb = wards.merge(
+    ward_profiles, left_on="GSS_CODE", right_on="New code", how="left"
+)
 
-ward_airbnb = gpd.GeoDataFrame(ward_airbnb, crs = "EPSG:27700")
+ward_airbnb = gpd.GeoDataFrame(ward_airbnb, crs="EPSG:27700")
 
-ward_airbnb['Borough'] = ward_airbnb['Ward name'].str.split(' - ').str[0]
+ward_airbnb["Borough"] = ward_airbnb["Ward name"].str.split(" - ").str[0]
 
-#creating poi_density variable
-ward_airbnb["n_poi"] = ward_airbnb.geometry.apply(lambda geom: sum(poi_data.geometry.intersects(geom)))
+# creating poi_density variable
+ward_airbnb["n_poi"] = ward_airbnb.geometry.apply(
+    lambda geom: sum(poi_data.geometry.intersects(geom))
+)
 ward_airbnb["poi_density"] = ward_airbnb["n_poi"] / ward_airbnb["HECTARES"]
 
-#intersecting airbnb points and ward data 
-#creating airbnb per 1000 households variables
-ward_airbnb["n_airbnb"] = ward_airbnb.geometry.apply(lambda geom: sum(filtered_airbnb.geometry.intersects(geom)))
+# intersecting airbnb points and ward data
+# creating airbnb per 1000 households variables
+ward_airbnb["n_airbnb"] = ward_airbnb.geometry.apply(
+    lambda geom: sum(filtered_airbnb.geometry.intersects(geom))
+)
 ward_airbnb["airbnb_density"] = ward_airbnb["n_airbnb"] / ward_airbnb["HECTARES"]
-#ward_airbnb["airbnb_per_1000"] = (ward_airbnb["n_airbnb"] / ward_airbnb["Population - 2015"])*1000
-ward_airbnb["airbnb_per_1000_household"] = (ward_airbnb["n_airbnb"] / ward_airbnb["Number of Household spaces - 2011"])*1000
+# ward_airbnb["airbnb_per_1000"] = (ward_airbnb["n_airbnb"] / ward_airbnb["Population - 2015"])*1000
+ward_airbnb["airbnb_per_1000_household"] = (
+    ward_airbnb["n_airbnb"] / ward_airbnb["Number of Household spaces - 2011"]
+) * 1000
 ```
 
 ## Analysis 
@@ -574,34 +640,54 @@ We selected these variables as research has shown that higher-income neighborhoo
 
 ```{python}
 # Calculate the 95th quantile for Airbnb density
-quantile = np.quantile(ward_airbnb['airbnb_per_1000_household'], 0.95)
-print(f"AirBnb Density 'Too-Late' Threshold: {quantile:.3} per 1000 households\n") 
+quantile = np.quantile(ward_airbnb["airbnb_per_1000_household"], 0.95)
+print(f"AirBnb Density 'Too-Late' Threshold: {quantile:.3} per 1000 households\n")
 
 
 # Create a high Airbnb density indicator
-ward_airbnb['high_airbnb_dens'] = ward_airbnb['airbnb_per_1000_household'] >= quantile
+ward_airbnb["high_airbnb_dens"] = ward_airbnb["airbnb_per_1000_household"] >= quantile
 
-print(f"Average Ward AirBnb Density: {ward_airbnb['airbnb_per_1000_household'].mean():.3} per 1000 households ")
-print(f"Average Ward House Price: £{ward_airbnb['Median House Price (£) - 2014'].mean():,.0f} ")
-print(f"Average Ward Point of Interest Density: {ward_airbnb['poi_density'].mean():.3} ")
-print(f"Average Ward Public Transport Accessibility Score: {ward_airbnb['Average Public Transport Accessibility score - 2014'].mean():.3}")
+print(
+    f"Average Ward AirBnb Density: {ward_airbnb['airbnb_per_1000_household'].mean():.3} per 1000 households "
+)
+print(
+    f"Average Ward House Price: £{ward_airbnb['Median House Price (£) - 2014'].mean():,.0f} "
+)
+print(
+    f"Average Ward Point of Interest Density: {ward_airbnb['poi_density'].mean():.3} "
+)
+print(
+    f"Average Ward Public Transport Accessibility Score: {ward_airbnb['Average Public Transport Accessibility score - 2014'].mean():.3}"
+)
 ```
 
 ```{python}
 # Prepare data for the decision tree
-X = ward_airbnb[['poi_density', 
-                 'Average Public Transport Accessibility score - 2014', 
-                 'Median House Price (£) - 2014', 
-                 'Median Household income estimate (2012/13)']]  # dependent variables
-y = ward_airbnb['high_airbnb_dens']
+X = ward_airbnb[
+    [
+        "poi_density",
+        "Average Public Transport Accessibility score - 2014",
+        "Median House Price (£) - 2014",
+        "Median Household income estimate (2012/13)",
+    ]
+]  # dependent variables
+y = ward_airbnb["high_airbnb_dens"]
 
 # Train a decision tree
-tree = DecisionTreeClassifier(max_depth=2, random_state=42) # limited depth means model remains interpretable without overfitting, focusing on the most critical features.
+tree = DecisionTreeClassifier(
+    max_depth=2, random_state=42
+)  # limited depth means model remains interpretable without overfitting, focusing on the most critical features.
 tree.fit(X, y)
 
 # Plot the decision tree
 plt.figure(figsize=(12, 8))
-plot_tree(tree, feature_names=X.columns, class_names=['Low Density', 'High Density'], filled=True, fontsize=10)
+plot_tree(
+    tree,
+    feature_names=X.columns,
+    class_names=["Low Density", "High Density"],
+    filled=True,
+    fontsize=10,
+)
 plt.show()
 ```
 
@@ -621,48 +707,59 @@ There are 9 wards that meet either of these conditions but do not exceed the ‘
 
 ```{python}
 # Add predictions to the GeoDataFrame
-ward_airbnb['prediction'] = tree.predict_proba(X)[:, 1] > 0.5
+ward_airbnb["prediction"] = tree.predict_proba(X)[:, 1] > 0.5
 
 # Generate the at-risk and too-late categories
-at_risk = ward_airbnb[(ward_airbnb['high_airbnb_dens'] == False) & (ward_airbnb['prediction'] == True)]
-too_late = ward_airbnb[ward_airbnb['high_airbnb_dens'] == True]
+at_risk = ward_airbnb[
+    (ward_airbnb["high_airbnb_dens"] == False) & (ward_airbnb["prediction"] == True)
+]
+too_late = ward_airbnb[ward_airbnb["high_airbnb_dens"] == True]
 
-ward_airbnb['status'] = 'neither'
-ward_airbnb.loc[ward_airbnb['Ward name'].isin(too_late['Ward name']), 'status'] = 'too_late'
-ward_airbnb.loc[ward_airbnb['Ward name'].isin(at_risk['Ward name']), 'status'] = 'at_risk'
+ward_airbnb["status"] = "neither"
+ward_airbnb.loc[ward_airbnb["Ward name"].isin(too_late["Ward name"]), "status"] = (
+    "too_late"
+)
+ward_airbnb.loc[ward_airbnb["Ward name"].isin(at_risk["Ward name"]), "status"] = (
+    "at_risk"
+)
 
 
-ward_names = at_risk['Ward name'].tolist()
+ward_names = at_risk["Ward name"].tolist()
 print(f"These at-risk wards are: {', '.join(ward_names)}")
 ```
 
 ```{python}
 # Visualise at risk wards with a choropleth map
 fig, ax = plt.subplots(1, 1, figsize=(10, 8))
-ward_airbnb.plot(column='status', 
-                 legend=True, 
-                 cmap='coolwarm', 
-                 ax=ax, 
-                 legend_kwds={'bbox_to_anchor': (1, 1)})
+ward_airbnb.plot(
+    column="status",
+    legend=True,
+    cmap="coolwarm",
+    ax=ax,
+    legend_kwds={"bbox_to_anchor": (1, 1)},
+)
 plt.title("Ward Status by Airbnb Density")
 
 # Add scale bar
-scalebar = ScaleBar(1, location='lower left')  # 1 is the length of one pixel, adjust based on map scale
+scalebar = ScaleBar(
+    1, location="lower left"
+)  # 1 is the length of one pixel, adjust based on map scale
 ax.add_artist(scalebar)
 
 # Add North Arrow
 x, y, arrow_length = 0.05, 0.98, 0.1
-ax.annotate('N', xy=(x, y), xytext=(x, y-arrow_length),
-            arrowprops=dict(facecolor='black', width=5, headwidth=15),
-            ha='center', va='center', fontsize=20,
-            xycoords=ax.transAxes)
-
-boroughs.plot(
-    edgecolor='lightgrey',    
-    linewidth=1,         
-    ax=ax,
-    facecolor='none'      
+ax.annotate(
+    "N",
+    xy=(x, y),
+    xytext=(x, y - arrow_length),
+    arrowprops=dict(facecolor="black", width=5, headwidth=15),
+    ha="center",
+    va="center",
+    fontsize=20,
+    xycoords=ax.transAxes,
 )
+
+boroughs.plot(edgecolor="lightgrey", linewidth=1, ax=ax, facecolor="none")
 plt.show()
 ```
 
@@ -674,21 +771,26 @@ To assess potential social impact of Airbnb in London, we analyzed the relations
 
 ```{python}
 # List of variables to analyze
-variables = [
-    '(ID2010) - Rank of average score (within London) - 2010']
+variables = ["(ID2010) - Rank of average score (within London) - 2010"]
 
 # Custom order for the categories
-category_order = ['at_risk', 'too_late', 'neither']
+category_order = ["at_risk", "too_late", "neither"]
 
 # Group the data by 'status' and calculate medians
-averages = ward_airbnb.groupby('status')[variables].mean()
+averages = ward_airbnb.groupby("status")[variables].mean()
 
 # Reindex to ensure the correct order of categories
 averages = averages.reindex(category_order)
 
-print(f"Mean Deprivation Rank for 'at-risk' wards: {averages.loc['at_risk'].iloc[0]:.0f}")
-print(f"Mean Deprivation Rank for 'too-late' wards: {averages.loc['too_late'].iloc[0]:.0f}")
-print(f"Mean Deprivation Rank for 'neither' wards: {averages.loc['neither'].iloc[0]:.0f}")
+print(
+    f"Mean Deprivation Rank for 'at-risk' wards: {averages.loc['at_risk'].iloc[0]:.0f}"
+)
+print(
+    f"Mean Deprivation Rank for 'too-late' wards: {averages.loc['too_late'].iloc[0]:.0f}"
+)
+print(
+    f"Mean Deprivation Rank for 'neither' wards: {averages.loc['neither'].iloc[0]:.0f}"
+)
 ```
 
 We begin with an exploratory data analysis of deprivation and ward classifications. The results shows the average deprivation rank between classification types. We see that the mean deprivation of “at-risk” wards is lower than “too-late” wards. This suggests that “at-risk” wards are not only desirable to Airbnb letters based on our classification, but are also particularly vulnerable to the negative impacts of Airbnb due to these areas being more deprived on average.
@@ -704,10 +806,10 @@ The question of remains where overlaps between “at-risk” wards and high depr
 w = Queen.from_dataframe(ward_airbnb, use_index=False)
 
 # Ensure the weights are row-standardized
-w.transform = 'r'
+w.transform = "r"
 
 # Use the variable '(ID2010) - Rank of average score (within London) - 2010' for the Moran test
-y = ward_airbnb['(ID2010) - Rank of average score (within London) - 2010'].values
+y = ward_airbnb["(ID2010) - Rank of average score (within London) - 2010"].values
 
 # Calculate Global Moran's I
 moran = Moran(y, w)
@@ -727,71 +829,83 @@ A Moran’s I test is conducted to establish that deprivation is not randomly di
 
 ```{python}
 # Ensure the weights are row-standardized
-w.transform = 'r'
+w.transform = "r"
 
 # Use the vulnerability variable for LISA analysis
-y = ward_airbnb['(ID2010) - Rank of average score (within London) - 2010'].values
+y = ward_airbnb["(ID2010) - Rank of average score (within London) - 2010"].values
 
 # Calculate Local Moran's I
 lisa = Moran_Local(y, w)
 
 # Add the LISA statistics to the GeoDataFrame
-ward_airbnb['moran_local'] = lisa.Is
-ward_airbnb['p_value'] = lisa.p_sim
-ward_airbnb['quadrant'] = lisa.q
+ward_airbnb["moran_local"] = lisa.Is
+ward_airbnb["p_value"] = lisa.p_sim
+ward_airbnb["quadrant"] = lisa.q
 
 # Identify significant clusters at 0.05 level
-ward_airbnb['significant'] = ward_airbnb['p_value'] < 0.05
+ward_airbnb["significant"] = ward_airbnb["p_value"] < 0.05
 
 # Define custom colormap for the LISA quadrants
-custom_cmap = ListedColormap(['navy', 'skyblue', 'darkred', 'pink'])  # Soft dark red, soft light blue, soft dark blue, soft light red
+custom_cmap = ListedColormap(
+    ["navy", "skyblue", "darkred", "pink"]
+)  # Soft dark red, soft light blue, soft dark blue, soft light red
 
 # Plot the LISA results
 fig, ax = plt.subplots(1, 1, figsize=(10, 10))
 
 # Use 'quadrant' for the categorical color mapping
 ward_airbnb.plot(
-    column='quadrant',  # Use 'quadrant' for discrete categories
-    cmap=custom_cmap,    # Apply the custom colormap
+    column="quadrant",  # Use 'quadrant' for discrete categories
+    cmap=custom_cmap,  # Apply the custom colormap
     ax=ax,
-    legend=False         # Disable the color bar
+    legend=False,  # Disable the color bar
 )
 
 # Outline the wards with 'at_risk' status
-at_risk_wards = ward_airbnb[ward_airbnb['status'] == 'at_risk']
+at_risk_wards = ward_airbnb[ward_airbnb["status"] == "at_risk"]
 at_risk_wards.plot(
-    edgecolor='yellow',    # Set black boundary for at-risk wards
-    linewidth=2,          # Thicker line width for visibility
+    edgecolor="yellow",  # Set black boundary for at-risk wards
+    linewidth=2,  # Thicker line width for visibility
     ax=ax,
-    facecolor='none'      # No fill color, just outlines
+    facecolor="none",  # No fill color, just outlines
 )
 
 # Outline the wards with 'at_risk' status
 boroughs.plot(
-    edgecolor='lightgrey',    # Set black boundary for at-risk wards
-    linewidth=1,          # Thicker line width for visibility
+    edgecolor="lightgrey",  # Set black boundary for at-risk wards
+    linewidth=1,  # Thicker line width for visibility
     ax=ax,
-    facecolor='none'      # No fill color, just outlines
+    facecolor="none",  # No fill color, just outlines
 )
 
 # Manually create legend with cluster labels
-legend_labels = ['High-High', 'Low-High', 'Low-Low', 'High-Low']
+legend_labels = ["High-High", "Low-High", "Low-Low", "High-Low"]
 colors = custom_cmap(range(4))  # Get colors from the custom colormap
 
 # Add the custom legend to the plot
-legend_elements = [mpatches.Patch(color=colors[i], label=legend_labels[i]) for i in range(4)]
-ax.legend(handles=legend_elements, title='LISA Cluster')
+legend_elements = [
+    mpatches.Patch(color=colors[i], label=legend_labels[i]) for i in range(4)
+]
+ax.legend(handles=legend_elements, title="LISA Cluster")
 
 # Add scale bar
-scalebar = ScaleBar(1, location='lower left')  # 1 is the length of one pixel, adjust based on map scale
+scalebar = ScaleBar(
+    1, location="lower left"
+)  # 1 is the length of one pixel, adjust based on map scale
 ax.add_artist(scalebar)
 
 # Add North Arrow
 x, y, arrow_length = 0.05, 0.98, 0.1
-ax.annotate('N', xy=(x, y), xytext=(x, y-arrow_length),
-            arrowprops=dict(facecolor='black', width=5, headwidth=15),
-            ha='center', va='center', fontsize=20,
-            xycoords=ax.transAxes)
+ax.annotate(
+    "N",
+    xy=(x, y),
+    xytext=(x, y - arrow_length),
+    arrowprops=dict(facecolor="black", width=5, headwidth=15),
+    ha="center",
+    va="center",
+    fontsize=20,
+    xycoords=ax.transAxes,
+)
 
 plt.title('LISA Analysis of Deprivation Rank, Highlighting "At-Risk" Wards')
 plt.show()
