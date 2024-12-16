@@ -67,6 +67,9 @@ from sklearn.metrics import confusion_matrix
 from sklearn.tree import DecisionTreeClassifier, plot_tree
 import zipfile
 import requests
+import importlib.util
+import subprocess
+import sys
 ```
 
 ```{python}
@@ -86,6 +89,30 @@ with zipfile.ZipFile(zip_path, "r") as zip_ref:
 
 # Remove the ZIP file
 os.remove(zip_path)
+```
+
+```{python}
+def install_and_import(package):
+    try:
+        # Check if the package is already installed
+        if importlib.util.find_spec(package) is None:
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+    except Exception as e:
+        print(f"An error occurred while checking or installing {package}: {e}")
+
+# Link incase this does not work: https://drive.google.com/uc?id=1Abf3I-ez_imd3hzAAmPu8UGcU8dH9lWK
+
+# Google Drive file URL and local file destination:
+
+install_and_import("gdown")
+import gdown
+
+file_url = "https://drive.google.com/uc?id=1Abf3I-ez_imd3hzAAmPu8UGcU8dH9lWK"
+destination = "London_Points_Of_Interest.gpkg"
+
+# Check if the file already exists
+if not os.path.exists(destination):
+    gdown.download(file_url, destination, quiet=False)
 ```
 
 ```{python}
@@ -498,7 +525,6 @@ We filtered the Airbnb dataset to focus on listings most relevant to neighbourho
 
 - Room Type: Focused on “Entire home/apt” listings due to their greater effect on housing and neighbourhood dynamics.
 
-### Data Reading and Wrangling
 
 ```{python}
 # Filtering Data again (Q6 has other filters in place):
@@ -529,48 +555,9 @@ filtered_airbnb = filtered_airbnb[filtered_airbnb["room_type"] == "Entire home/a
 ```
 
 ```{python}
-# Reading in Point of Interest data:
+#Reading in Point of Interest data:
 
-import importlib.util
-import subprocess
-import sys
-
-
-def install_and_import(package):
-    try:
-        # Check if the package is already installed
-        if importlib.util.find_spec(package) is None:
-            print(f"{package} not found. Installing...")
-            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-        else:
-            print(f"{package} is already installed. Skipping installation.")
-    except Exception as e:
-        print(f"An error occurred while checking or installing {package}: {e}")
-
-# Link incase this does not work: https://drive.google.com/uc?id=1Abf3I-ez_imd3hzAAmPu8UGcU8dH9lWK
-```
-
-```{python}
-# Google Drive file URL and local file destination:
-
-install_and_import("gdown")
-import gdown
-
-file_url = "https://drive.google.com/uc?id=1Abf3I-ez_imd3hzAAmPu8UGcU8dH9lWK"
-destination = "London_Points_Of_Interest.gpkg"
-
-# Check if the file already exists
-if not os.path.exists(destination):
-    print(f"File not found locally. Downloading {destination}...")
-    gdown.download(file_url, destination, quiet=False)
-    print(f"Downloaded file: {destination}")
-else:
-    print(f"File already exists: {destination}. Skipping download.")
-
-# Verify file size
-print(f"File size: {os.path.getsize(destination)} bytes")
-
-gdf = gpd.read_file(destination)
+gdf = gpd.read_file("London_Points_Of_Interest.gpkg")
 
 # Selecting pubs, restaurants, cafes
 desired_classes = [
