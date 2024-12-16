@@ -19,8 +19,8 @@ format:
     include-in-header:
       text: |
         \addtokomafont{disposition}{\rmfamily}
-    mainfont: Spectral
-    sansfont: Roboto Flex
+    mainfont: Liberation Serif
+    sansfont: Liberation Sans
     monofont: Liberation Mono
     papersize: a4
     geometry:
@@ -490,7 +490,7 @@ Our analysis aims to answer the following questions: What wards are â€œat riskâ€
 
 We filtered the Airbnb dataset to focus on listings most relevant to neighbourhood impacts:
 
-- Minimum Nights: Excluded stays over 30 nights to target short-term rentals.
+- Minimum Nights: Excluded listings with a minimum stay over 30 nights to target short-term rentals.
 
 - Recently Active: Included listings with reviews in the past six months for current relevance.
 
