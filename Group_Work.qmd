@@ -47,6 +47,34 @@ jupyter:
 ---
 
 ```{python}
+## Declaration of Authorship {.unnumbered .unlisted}
+
+We, CHASE, pledge our honour that the work presented in this assessment is our own. Where information has been derived from other sources, we confirm that this has been indicated in the work. Where a Large Language Model such as ChatGPT has been used we confirm that we have made its contribution to the final submission clear.
+
+Date: 16 December 2024
+
+Student Numbers: 
+24223425
+24097459
+24081453
+24217725
+22218425
+
+## Brief Group Reflection
+
+| What Went Well | What Was Challenging |
+| -------------- | -------------------- |
+| A              | B                    |
+| C              | D                    |
+
+## Priorities for Feedback
+
+Are there any areas on which you would appreciate more detailed feedback if we're able to offer it?
+
+{{< pagebreak >}}
+```
+
+```{python}
 #| echo: false
 # importing packages
 import os
@@ -452,13 +480,13 @@ min_listings = hosts_summary["total_listings"].min()
 host_with_max_listings = hosts_summary[hosts_summary["total_listings"] == max_listings]
 
 # Print the results
-print(f"Total number of hosts with more than 2 listings: {total_hosts}")
-print(f"Average number of listings per host: {average_listings:.2f}")
-print(f"Maximum number of listings: {max_listings}")
-print(f"Minimum number of listings (2 or more): {min_listings}")
+#print(f"Total number of hosts with more than 2 listings: {total_hosts}")
+#print(f"Average number of listings per host: {average_listings:.2f}")
+#print(f"Maximum number of listings: {max_listings}")
+#print(f"Minimum number of listings (2 or more): {min_listings}")
 
-print("\nHost(s) with the most listings:")
-print(host_with_max_listings)
+#print("\nHost(s) with the most listings:")
+#print(host_with_max_listings)
 ```
 
 ## 7. Drawing on your previous answers, and supporting your response with evidence (*e.g.* figures, maps, EDA/ESDA, and simple statistical analysis/models drawing on experience from, e.g., CASA0007), how *could* the InsideAirbnb data set be used to inform the regulation of Short-Term Lets (STL) in London? 
