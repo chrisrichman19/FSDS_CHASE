@@ -1,6 +1,6 @@
 ---
-bibliography: CHASEref.bib
-csl: harvard-cite-them-right.csl
+bibliography: FSDS_CHASE-main/CHASEref.bib
+csl: FSDS_CHASE-main/harvard-cite-them-right.csl
 title: CHASE's Group Project
 execute:
   echo: false
