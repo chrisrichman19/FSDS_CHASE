@@ -207,7 +207,7 @@ ward_profiles = ward_profiles[['Ward name', 'New code','Average Public Transport
 ```{python}
 # Ward geometry-data 
 wards = gpd.read_file("data/London-wards-2011/London_Ward_CityMerged.shp").to_crs(epsg=27700)[["GSS_CODE","HECTARES","geometry"]]
-boroughs = gpd.read_file("data/statistical-gis-boundaries-london/ESRI/London_Borough_Excluding_MHW.shp")
+boroughs = gpd.read_file("data/statistical-gis-boundaries-london/ESRI/London_Borough_Excluding_MHW.shp").to_crs(epsg=27700)
 
 inner_london_boroughs = [
     'Camden', 'Greenwich', 'Hackney', 'Hammersmith and Fulham', 'Islington', 
@@ -221,21 +221,6 @@ inner_boroughs = boroughs[boroughs['NAME'].isin(inner_london_boroughs)]
 There is a possibility of making the base map of the airbnb density the price so that we save 150 words. So there wont be a bar graph of average price. 
 
 ```{python}
-# Creating a graph of short-term listings (no more than 30 days) of airbnb data 
-# Ensuring boroughs have a CRS set
-if boroughs.crs is None:
-    boroughs.set_crs(epsg=27700, inplace=True) 
-boroughs = boroughs.to_crs(epsg=4326)  
-
-# Ensuring Airbnb data is a GeoDataFrame and set CRS if missing
-if filtered_airbnb.crs is None:
-    filtered_airbnb = gpd.GeoDataFrame(
-        filtered_airbnb,
-        geometry=filtered_airbnb.geometry,
-        crs="EPSG:27700"  
-    )
-filtered_airbnb = filtered_airbnb.to_crs(epsg=4326)  
-
 # Perform spatial join to assign each Airbnb to a borough
 airbnb_in_boroughs = gpd.sjoin(filtered_airbnb, boroughs, how="inner", predicate="within")
 
@@ -369,20 +354,6 @@ A concern that Airbnb imposes in London is ‘commercialisation’. The Greater 
 In the current 2024 analysis, we found that there is a total of 6254 listings available for over 90+ nights. Westminster has 15.7% of those listings, Kensington and Chelsea at 9%, and Tower Hamlets at 7.5%.
 
 ```{python}
-# Ensuring boroughs have a CRS set
-if boroughs.crs is None:
-    boroughs.set_crs(epsg=27700, inplace=True)  
-boroughs = boroughs.to_crs(epsg=4326)  
-
-# Ensuring Airbnb data is a GeoDataFrame and set CRS if missing
-if filtered_airbnb.crs is None:
-    filtered_airbnb = gpd.GeoDataFrame(
-        filtered_airbnb,
-        geometry=filtered_airbnb.geometry,
-        crs="EPSG:27700"  
-    )
-filtered_airbnb = filtered_airbnb.to_crs(epsg=4326)  
-
 # Filtering listings for 90+ nights of availability
 filtered_airbnb = filtered_airbnb[filtered_airbnb['maximum_nights'] >= 90]
 
@@ -405,20 +376,6 @@ print(f"\nTotal Airbnb Listings Available for 90+ nights: {total_listings}")
 ```
 
 ```{python}
-# Ensuring boroughs have a CRS set
-if boroughs.crs is None:
-    boroughs.set_crs(epsg=27700, inplace=True)  
-boroughs = boroughs.to_crs(epsg=4326)  
-
-# Ensuring Airbnb data is a GeoDataFrame and set CRS if missing
-if filtered_airbnb.crs is None:
-    filtered_airbnb = gpd.GeoDataFrame(
-        filtered_airbnb,
-        geometry=filtered_airbnb.geometry,
-        crs="EPSG:27700"  
-    )
-filtered_airbnb = filtered_airbnb.to_crs(epsg=4326)  
-
 # Filtering listings for 90+ nights of availability
 filtered_airbnb = filtered_airbnb[filtered_airbnb['availability_365'] >= 90]
 
