@@ -659,41 +659,6 @@ ward_airbnb.loc[ward_airbnb["Ward name"].isin(at_risk["Ward name"]), "status"] =
 )
 ```
 
-```{python}
-# Visualise at risk wards with a choropleth map
-fig, ax = plt.subplots(1, 1, figsize=(10, 8))
-ward_airbnb.plot(
-    column="status",
-    legend=True,
-    cmap="coolwarm",
-    ax=ax,
-    legend_kwds={"bbox_to_anchor": (1, 1)},
-)
-plt.title("Ward Status by Airbnb Density")
-
-# Add scale bar
-scalebar = ScaleBar(
-    1, location="lower left"
-)  # 1 is the length of one pixel, adjust based on map scale
-ax.add_artist(scalebar)
-
-# Add North Arrow
-x, y, arrow_length = 0.05, 0.98, 0.1
-ax.annotate(
-    "N",
-    xy=(x, y),
-    xytext=(x, y - arrow_length),
-    arrowprops=dict(facecolor="black", width=5, headwidth=15),
-    ha="center",
-    va="center",
-    fontsize=20,
-    xycoords=ax.transAxes,
-)
-
-boroughs.plot(edgecolor="lightgrey", linewidth=1, ax=ax, facecolor="none")
-plt.show()
-```
-
 ### "At-Risk" Wards and Deprivation
 
 To assess potential social impact of Airbnb in London, we analyzed the relationship between our Airbnb decision tree classifications and deprivation rank in wards. Deprivation rank is a relative measure comparing the level of deprivation across London wards. The lower the deprivation rank, the greater the deprivation score in the ward.
