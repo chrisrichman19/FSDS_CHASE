@@ -47,6 +47,12 @@ jupyter:
 ---
 
 ```{python}
+# Dowload biobib
+
+# Download harvard-cite-them-right.csl
+```
+
+```{python}
 #| echo: false
 import os
 
@@ -66,21 +72,38 @@ else:
     df.to_parquet(file)
 ```
 
+```{python}
+#importing packages 
+import pandas as pd
+import geopandas as gpd
+from shapely.geometry import Point
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+import matplotlib.pyplot as plt
+from matplotlib.offsetbox import AnchoredText
+import numpy as np
+import seaborn as sns
+from scipy import stats
+from libpysal.weights import Queen
+from esda import Moran
+from esda import Moran_Local
+from matplotlib.patches import Patch
+from matplotlib.colors import ListedColormap
+from matplotlib_scalebar.scalebar import ScaleBar
+from sklearn.metrics import confusion_matrix
+```
+
 ## 1. Who collected the InsideAirbnb data?
 
-::: {.duedate}
 
 The InsideAirbnb was collected by Murray Cox, Tom Slee, and a team of collaborators working to empower communities through data. Murray Cox is an Australian community artist, activist and photo- journalist who "uses data, media, and technology for social change" @ia_about. (40)
 
-:::
 
 ## 2. Why did they collect the InsideAirbnb data?
 
-::: {.duedate}
+
 
 Murray Cox and Tom Slee collected the InsideAirbnb data to critically assess the impact of Airbnb on housing markets, to provide unbiased independent publicly available data, and to facilitate the improved understanding of city authorities and regulatory bodies. Motivated by an observation of increasing entire-home listings and "multi-lister" hosts, Cox and Slee aimed to challenge Airbnb’s portrayal as a platform for casual home sharing, revealing that much of its revenue comes from commercial operators who are pushing out local residents by raising house prices @carville_meet_2019. (84)
 
-:::
 
 ```{python}
 #| output: asis
@@ -98,18 +121,14 @@ ax.set_xlim([0, 500]);
 
 ## 3. How did they collect it?
 
-::: {.duedate}
-
 Inside Airbnb’s data is collected through web-scraping, using public information from Airbnb's website. There were two main stages of data collection:
 Identify listings for chosen set of coordinates.
 Collect the following information for each listing: listing type, approximate address, number of reviews and average review score, capacity, numbers of bedrooms and bathrooms, price, and coordinates.
 Data is periodically scraped for each location from the Airbnb website adamiak_airbnb_2019, @ia_home. ()
 
-:::
 
 ## 4. How does the method of collection (Q3) impact the completeness and/or accuracy of the InsideAirbnb data? How well does it represent the process it seeks to study, and what wider issues does this raise?
 
-::: {.duedate}
 
 Inside Airbnb (IA) data is limited as scraping can only take place using publicly available data; that which is allowed in Airbnb’s robots.txt file. Datasets are therefore only an approximation of the Airbnb market and might not be suitable for use by those requiring more detailed understanding of Airbnb’s effect on housing markets eg. policymakers.	
 
@@ -123,11 +142,9 @@ The IA data is therefore not ‘raw’, it is “verified, cleansed, analyzed an
 
 Completeness and accuracy challenges raise the question of whether researchers should rely solely on data collected by one organisation, from one website, to analyse the impact of an industry. By focusing solely on the data provided by IA researchers will come to biased and partial conclusions that are influenced by the views of IA’s creators. (345)
 
-:::
 
 ## 5. What ethical considerations does the use of the InsideAirbnb data raise? 
 
-::: {.duedate}
 
 Terms of Service outline the contract through which users and Airbnb interact, specifying users must not scrape or use scrapers or crawlers to access or collect data @airbnb_terms.
 
@@ -145,23 +162,688 @@ As @mason_1986 explains, depending on how it is used, the data’s accuracy can 
 
  @mason_1986 argues that accessibility is also an ethical concern when it comes to using data. Not everyone has the technologies required to access the data, and even fewer have the intellectual skills to interpret and process the InsideAirbnb data. @dignazio_5_2020 explain that differential power has a silencing effect and that quantitative data can leave people out. Whilst InsideAirbnb’s mission is to “work towards a vision where communities are empowered with data and information” @ia_home, its capability to do so is limited if the communities it seeks to empower lack the means to make use of the available data. The lack in transfer of data science skills and knowledge to the communities that InsideAirbnb seek to represent, and subsequent reliance on external researchers, mean that the imbalances in education and power will not be sufficiently addressed since the communities’ reality will only ever be told through the partial perspective of said researchers. (540)
 
-:::
+```{python}
+# Reading Airbnb data 
 
-## 6. With reference to the InsideAirbnb data (*i.e.* using numbers, figures, maps, and descriptive statistics), what does an analysis of Hosts and the types of properties that they list suggest about the nature of Airbnb lettings in London? 
+airbnb = pd.read_csv("data/20240614-London-listings.csv.gz")
 
-::: {.duedate}
+airbnb = gpd.GeoDataFrame(airbnb, 
+                       geometry=gpd.points_from_xy(airbnb.longitude, airbnb.latitude), 
+                       crs="EPSG:4326").to_crs(epsg=27700)
+```
 
-( 15 points; Answer due {{< var assess.group-date >}} )
+```{python}
+#filtering Airbnb data 
+from datetime import datetime, timedelta
 
-:::
+# Filter min. nights
+filtered_airbnb=airbnb[airbnb.minimum_nights<=30]
+
+## To determine recently active sites
+
+# Convert 'last_review' to datetime format
+filtered_airbnb.loc[:, 'last_review'] = pd.to_datetime(filtered_airbnb['last_review'], errors='coerce')
+
+# Set the reference date (for reproducibility)
+reference_date = datetime(2024, 11, 28)
+
+# Calculate the threshold date (6 months before the reference date)
+six_months_ago = reference_date - timedelta(days=6 * 30) 
+
+# Filter the data
+filtered_airbnb = filtered_airbnb[filtered_airbnb['last_review'] >= six_months_ago]
+
+filtered_airbnb = filtered_airbnb[filtered_airbnb['availability_365'] >= 90]
+```
+
+```{python}
+#London Ward profiles 
+ward_profiles = pd.read_csv("data/ward-profiles.csv", encoding="latin1")
+
+# Including only selected variables
+ward_profiles = ward_profiles[['Ward name', 'New code','Average Public Transport Accessibility score - 2014','Median House Price (£) - 2014','Median Household income estimate (2012/13)','(ID2010) - Rank of average score (within London) - 2010','(ID2010) % of LSOAs in worst 50% nationally - 2010','Average GCSE capped point scores - 2014',
+    '% BAME - 2011','Number of Household spaces - 2011']]
+```
+
+```{python}
+# Ward geometry-data 
+wards = gpd.read_file("data/London-wards-2011/London_Ward_CityMerged.shp").to_crs(epsg=27700)[["GSS_CODE","HECTARES","geometry"]]
+boroughs = gpd.read_file("data/statistical-gis-boundaries-london/ESRI/London_Borough_Excluding_MHW.shp")
+
+inner_london_boroughs = [
+    'Camden', 'Greenwich', 'Hackney', 'Hammersmith and Fulham', 'Islington', 
+    'Kensington and Chelsea', 'Lambeth', 'Lewisham', 'Southwark', 'Tower Hamlets', 
+    'Wandsworth', 'Westminster', 'City of London'
+]
+inner_boroughs = boroughs[boroughs['NAME'].isin(inner_london_boroughs)]
+```
+
+## 6. With reference to the InsideAirbnb data (*i.e.* using numbers, figures, maps, and descriptive statistics), what does an analysis of Hosts and the types of properties that they list suggest about the nature of Airbnb lettings in London? - Total 698 
+There is a possibility of making the base map of the airbnb density the price so that we save 150 words. So there wont be a bar graph of average price. 
+
+```{python}
+# Creating a graph of short-term listings (no more than 30 days) of airbnb data 
+# Ensuring boroughs have a CRS set
+if boroughs.crs is None:
+    boroughs.set_crs(epsg=27700, inplace=True) 
+boroughs = boroughs.to_crs(epsg=4326)  
+
+# Ensuring Airbnb data is a GeoDataFrame and set CRS if missing
+if filtered_airbnb.crs is None:
+    filtered_airbnb = gpd.GeoDataFrame(
+        filtered_airbnb,
+        geometry=filtered_airbnb.geometry,
+        crs="EPSG:27700"  
+    )
+filtered_airbnb = filtered_airbnb.to_crs(epsg=4326)  
+
+# Perform spatial join to assign each Airbnb to a borough
+airbnb_in_boroughs = gpd.sjoin(filtered_airbnb, boroughs, how="inner", predicate="within")
+
+# Counting the number of Airbnb listings in each borough
+borough_counts = airbnb_in_boroughs.groupby("NAME").size().reset_index(name="Airbnb_Counts")
+
+# Merging the counts back with the boroughs GeoDataFrame
+boroughs = boroughs.merge(borough_counts, left_on="NAME", right_on="NAME", how="left")
+
+# Filling NaN values with 0 (in case there are boroughs with no Airbnb listings)
+boroughs["Airbnb_Counts"] = boroughs["Airbnb_Counts"].fillna(0)
+
+# Plotting the choropleth map with Airbnb points
+fig, ax = plt.subplots(figsize=(12, 12))
+
+# Plotting the boroughs and shade based on Airbnb counts
+choropleth = boroughs.plot(
+    column="Airbnb_Counts",
+    cmap="YlOrRd",  # Bright red -> orange -> yellow
+    legend=True,
+    edgecolor="black",
+    linewidth=0.5,
+    ax=ax
+)
+
+# Resizing and customizing the colourbar legend
+colorbar = choropleth.get_figure().get_axes()[1]
+colorbar.set_title("Listings\nCount", fontsize=12)
+colorbar.text(1.3, 1.01, "High", fontsize=10, transform=ax.transAxes, ha="center")
+colorbar.text(1.3, -0.01, "Low", fontsize=10, transform=ax.transAxes, ha="center")
+
+# Plotting Airbnb points on top
+filtered_airbnb.plot(
+    ax=ax,
+    color="blue",
+    markersize=5,
+    alpha=0.5,
+    label="Airbnb Listings"
+)
+
+# Addding a north arrow to the top-left corner
+north_arrow = AnchoredText("N ↑", loc="upper left", prop=dict(size=15), frameon=False, borderpad=1)
+ax.add_artist(north_arrow)
+
+# Customizing the legend and placeing it on the right
+airbnb_patch = mpatches.Patch(color="blue", label="Airbnb Listings")
+legend = ax.legend(handles=[airbnb_patch], title="Legend", fontsize=12, loc="upper right", title_fontsize=13)
+
+# Adding title and labels
+plt.title("Distribution of Short Term Airbnb Listings in London Boroughs(2024)", fontsize=16)
+ax.set_xlabel("Longitude", fontsize=12)
+ax.set_ylabel("Latitude", fontsize=12)
+
+# Final adjustments and showing the map
+plt.tight_layout()
+plt.show()
+```
+
+Airbnb’s short-term listings are clustered in boroughs surrounding the City of London. 14.4% of listings occur in Westminster, followed by 8.1% in Kensington and Chelsea, then 7.5% in Camden.
+
+```{python}
+# Listing all Airbnb counts and calculating percentages
+# Performing spatial join to assign each Airbnb to a borough
+airbnb_in_boroughs = gpd.sjoin(filtered_airbnb, boroughs, how="inner", predicate="within")
+
+# Count the number of Airbnb listings in each borough
+borough_counts = airbnb_in_boroughs.groupby("NAME").size().reset_index(name="Airbnb_Counts")
+
+# Fill NaN values with 0 in case of missing boroughs
+borough_counts = borough_counts.fillna(0)
+
+# Calculate the total number of Airbnb listings
+total_listings = borough_counts["Airbnb_Counts"].sum()
+
+# Calculate the percentage of listings in each borough
+borough_counts["Percentage"] = (borough_counts["Airbnb_Counts"] / total_listings) * 100
+
+# Sort the counts by the percentage of listings
+borough_counts = borough_counts.sort_values(by="Percentage", ascending=False)
+
+# Print the borough names with percentages
+print("Boroughs with Airbnb Percentages:")
+print(borough_counts[["NAME", "Airbnb_Counts", "Percentage"]])
+
+# Save the result to a CSV file (optional)
+borough_counts.to_csv("airbnb_percentage_by_borough.csv", index=False)
+```
+
+### Calculating the Average Price of Airbnb Listings in London Boroughs 
+
+```{python}
+# Calculating the average price of Airbnb listings in each borough
+borough_prices = airbnb_in_boroughs.groupby("NAME")["price"].mean().reset_index(name="Average_Price")
+
+# Rounding the average price to whole numbers
+borough_prices["Average_Price"] = borough_prices["Average_Price"].round(0)
+
+# Sorting the boroughs by average price for a cleaner plot
+borough_prices = borough_prices.sort_values(by="Average_Price", ascending=False)
+
+# Debugging: Printing the first few rows of average prices
+print("Average Price of Airbnb Listings per Borough:")
+print(borough_prices.head())
+
+# Plotting the average price as a bar graph
+plt.figure(figsize=(12, 8))
+plt.bar(borough_prices["NAME"], borough_prices["Average_Price"], color="skyblue", edgecolor="black")
+
+# Adding titles and labels
+plt.title("Average Price of Airbnb Listings in London Boroughs (2024)", fontsize=16)
+plt.xlabel("Borough", fontsize=12)
+plt.ylabel("Average Price (£)", fontsize=12)
+plt.xticks(rotation=45, ha="right", fontsize=10)
+
+# Adding data labels on top of each bar
+for i, value in enumerate(borough_prices["Average_Price"]):
+    plt.text(i, value + 5, f"{int(value)}", ha="center", va="bottom", fontsize=8)
+
+# Adjusting layout for better appearance
+plt.tight_layout()
+
+# Showing the output 
+plt.show()
+```
+
+Westminster, Kensington and Chelsea, and the City of London exhibit the highest average prices, while Bexley and Harrow have the lowest, reflecting significant variation in short-term rental costs across the city.
+
+### Properties Available for over 90+ Nights 
+
+A concern that Airbnb imposes in London is ‘commercialisation’. The Greater London Authority (GLA) states that “it creates a risk of residential properties being used as letting businesses without the required planning permission and protections for neighbours” (Cromarty, 2024, p.26). To avoid this issue, homeowners are required to obtain planning permission if they intend to use residential properties for short-term accommodation exceeding 90 nights.
+In the current 2024 analysis, we found that there is a total of 6254 listings available for over 90+ nights. Westminster has 15.7% of those listings, Kensington and Chelsea at 9%, and Tower Hamlets at 7.5%.
+
+```{python}
+# Ensuring boroughs have a CRS set
+if boroughs.crs is None:
+    boroughs.set_crs(epsg=27700, inplace=True)  
+boroughs = boroughs.to_crs(epsg=4326)  
+
+# Ensuring Airbnb data is a GeoDataFrame and set CRS if missing
+if filtered_airbnb.crs is None:
+    filtered_airbnb = gpd.GeoDataFrame(
+        filtered_airbnb,
+        geometry=filtered_airbnb.geometry,
+        crs="EPSG:27700"  
+    )
+filtered_airbnb = filtered_airbnb.to_crs(epsg=4326)  
+
+# Filtering listings for 90+ nights of availability
+filtered_airbnb = filtered_airbnb[filtered_airbnb['maximum_nights'] >= 90]
+
+# Performing a spatial join to assign each Airbnb to a borough
+airbnb_in_boroughs = gpd.sjoin(filtered_airbnb, boroughs, how="inner", predicate="within")
+
+# Counting the number of Airbnb listings in each borough
+borough_counts = airbnb_in_boroughs.groupby("NAME").size().reset_index(name="Airbnb_Counts")
+
+# Calculating the percentage of listings for each borough
+total_listings = borough_counts["Airbnb_Counts"].sum()
+borough_counts["Percentage"] = (borough_counts["Airbnb_Counts"] / total_listings) * 100
+
+# Displaying results
+print("Airbnb Listings Available for 90+ nights by Borough (With Percentage):")
+print(borough_counts)
+
+# Displaying the total number of listings
+print(f"\nTotal Airbnb Listings Available for 90+ nights: {total_listings}")
+```
+
+```{python}
+# Ensuring boroughs have a CRS set
+if boroughs.crs is None:
+    boroughs.set_crs(epsg=27700, inplace=True)  
+boroughs = boroughs.to_crs(epsg=4326)  
+
+# Ensuring Airbnb data is a GeoDataFrame and set CRS if missing
+if filtered_airbnb.crs is None:
+    filtered_airbnb = gpd.GeoDataFrame(
+        filtered_airbnb,
+        geometry=filtered_airbnb.geometry,
+        crs="EPSG:27700"  
+    )
+filtered_airbnb = filtered_airbnb.to_crs(epsg=4326)  
+
+# Filtering listings for 90+ nights of availability
+filtered_airbnb = filtered_airbnb[filtered_airbnb['availability_365'] >= 90]
+
+# Total number of listings
+total_properties = len(filtered_airbnb)
+print(f"Total Airbnb Listings Available for 90+ Nights: {total_properties}")
+
+# Grouping by room type to count properties rented for 90+ nights
+room_type_counts = filtered_airbnb["room_type"].value_counts().reset_index()
+room_type_counts.columns = ["Room Type", "Count"]
+
+# Printing the room type counts
+print("\nRoom Types Available for 90+ Nights:")
+print(room_type_counts)
+
+# Plotting the room types as a bar graph
+plt.figure(figsize=(8, 6))
+plt.bar(room_type_counts["Room Type"], room_type_counts["Count"], color="orange", edgecolor="black")
+
+# Adding titles and labels
+plt.title("Room Types Rented for 90+ Nights", fontsize=16)
+plt.xlabel("Room Type", fontsize=12)
+plt.ylabel("Number of Properties", fontsize=12)
+
+# Adding data labels on top of each bar
+for i, value in enumerate(room_type_counts["Count"]):
+    plt.text(i, value + 5, str(value), ha="center", va="bottom", fontsize=10)
+
+# Displaying the graph
+plt.tight_layout()
+plt.show()
+```
+
+The most common ‘room types’ available for over 90+ nights are entire homes and apartments.
+
+### Hosts with Multiple Listings 
+
+GLA have discovered that hosts with multiple listings on Airbnb are more likely to be using the platform for commercial purposes (Cromarty, 2024, p.25). The total number of hosts with two or more listings is 6253 with the average number of listings per host being 7.06. The maximum number of listings is 1253 that belong to Sykes Holiday Cottages. This shows that the Airbnb market in London is commercialised and does not adhere to the GLA 90-night policy limit. 
+
+```{python}
+# Filter hosts with total listings greater than 2
+hosts_with_2plus_listings = airbnb[airbnb["host_listings_count"] >= 2]
+
+# Group by host_name and aggregate total listings
+hosts_summary = hosts_with_2plus_listings.groupby("host_name").agg(
+    total_listings=("host_listings_count", "first")
+).reset_index()
+
+# Calculate required metrics
+total_hosts = hosts_summary.shape[0]
+average_listings = hosts_summary["total_listings"].mean()
+max_listings = hosts_summary["total_listings"].max()
+min_listings = hosts_summary["total_listings"].min()
+
+# Find the host(s) with the most listings
+host_with_max_listings = hosts_summary[hosts_summary["total_listings"] == max_listings]
+
+# Print the results
+print(f"Total number of hosts with more than 2 listings: {total_hosts}")
+print(f"Average number of listings per host: {average_listings:.2f}")
+print(f"Maximum number of listings: {max_listings}")
+print(f"Minimum number of listings (2 or more): {min_listings}")
+
+print("\nHost(s) with the most listings:")
+print(host_with_max_listings)
+```
 
 ## 7. Drawing on your previous answers, and supporting your response with evidence (*e.g.* figures, maps, EDA/ESDA, and simple statistical analysis/models drawing on experience from, e.g., CASA0007), how *could* the InsideAirbnb data set be used to inform the regulation of Short-Term Lets (STL) in London? 
 
-::: {.duedate}
+State of airbnb in london
 
-( 45 points; Answer due {{< var assess.group-date >}} )
+Already a shit ton of airbnbs in london
+Draw on q6
+Airbnb has the potential to exacerbate the affordable housing crisis in London by reducing the availability of long-term rentals. The impact of Airbnb is of particular concern with regard to deprived households, whereby increased housing costs can contribute to displacement, making it more difficult for these residents to remain in their communities.
 
-:::
+Our analysis aims to answer the following questions: What wards are “at risk” of becoming an Airbnb hotspot? Of these wards, which are also the most vulnerable to the negative social impacts of Airbnb?
+
+We cleaned the Airbnb dataset to focus on listings most relevant to neighbourhood impacts:
+
+Minimum Nights: Excluded stays over 30 nights to target short-term rentals.
+
+Recently Active: Included listings with reviews in the past six months for current relevance.
+
+Availability: Kept listings available at least 90 days annually to capture impactful activity.
+
+Room Type: Focused on “Entire home/apt” listings due to their greater effect on housing and neighbourhood dynamics.
+
+```{python}
+# Filtering Data again as Q6 has other filters in place
+from datetime import datetime, timedelta
+
+# Filter min. nights
+filtered_airbnb=airbnb[airbnb.minimum_nights<=30]
+
+## To determine recently active sites
+
+# Convert 'last_review' to datetime format
+filtered_airbnb.loc[:, 'last_review'] = pd.to_datetime(filtered_airbnb['last_review'], errors='coerce')
+
+# Set the reference date (for reproducibility)
+reference_date = datetime(2024, 11, 28)
+
+# Calculate the threshold date (6 months before the reference date)
+six_months_ago = reference_date - timedelta(days=6 * 30) 
+
+# Filter the data
+filtered_airbnb = filtered_airbnb[filtered_airbnb['last_review'] >= six_months_ago]
+
+filtered_airbnb = filtered_airbnb[filtered_airbnb['availability_365'] >= 90]
+
+filtered_airbnb = filtered_airbnb[filtered_airbnb['room_type'] == "Entire home/apt"]
+```
+
+```{python}
+# Reading in Point of Interest data 
+import subprocess
+import sys
+import importlib.util
+
+def install_and_import(package):
+    try:
+        # Check if the package is already installed
+        if importlib.util.find_spec(package) is None:
+            print(f"{package} not found. Installing...")
+            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+        else:
+            print(f"{package} is already installed. Skipping installation.")
+    except Exception as e:
+        print(f"An error occurred while checking or installing {package}: {e}")
+
+install_and_import("gdown")
+
+#Link incase this does not work: https://drive.google.com/uc?id=1Abf3I-ez_imd3hzAAmPu8UGcU8dH9lWK
+```
+
+```{python}
+import gdown
+import os
+
+# Google Drive file URL and local file destination
+file_url = "https://drive.google.com/uc?id=1Abf3I-ez_imd3hzAAmPu8UGcU8dH9lWK"
+destination = "London_Points_Of_Interest.gpkg"
+
+# Check if the file already exists
+if not os.path.exists(destination):
+    print(f"File not found locally. Downloading {destination}...")
+    gdown.download(file_url, destination, quiet=False)
+    print(f"Downloaded file: {destination}")
+else:
+    print(f"File already exists: {destination}. Skipping download.")
+
+# Verify file size
+print(f"File size: {os.path.getsize(destination)} bytes")
+
+gdf = gpd.read_file(destination)
+
+# Selecting pubs, restaurants, cafes
+desired_classes = ["Pubs, Bars and Inns", "Cafes, Snack Bars and Tea Rooms", "Restaurants"]
+poi_data = gdf[gdf['classname'].isin(desired_classes)]
+```
+
+```{python}
+#Merging files together
+ward_airbnb = wards.merge(ward_profiles, left_on = "GSS_CODE", right_on = "New code", how = "left")
+
+ward_airbnb = gpd.GeoDataFrame(ward_airbnb, crs = "EPSG:27700")
+
+ward_airbnb['Borough'] = ward_airbnb['Ward name'].str.split(' - ').str[0]
+
+#creating poi_density variable
+ward_airbnb["n_poi"] = ward_airbnb.geometry.apply(lambda geom: sum(poi_data.geometry.intersects(geom)))
+ward_airbnb["poi_density"] = ward_airbnb["n_poi"] / ward_airbnb["HECTARES"]
+
+#intersecting airbnb points and ward data 
+#creating airbnb per 1000 households variables
+ward_airbnb["n_airbnb"] = ward_airbnb.geometry.apply(lambda geom: sum(filtered_airbnb.geometry.intersects(geom)))
+ward_airbnb["airbnb_density"] = ward_airbnb["n_airbnb"] / ward_airbnb["HECTARES"]
+#ward_airbnb["airbnb_per_1000"] = (ward_airbnb["n_airbnb"] / ward_airbnb["Population - 2015"])*1000
+ward_airbnb["airbnb_per_1000_household"] = (ward_airbnb["n_airbnb"] / ward_airbnb["Number of Household spaces - 2011"])*1000
+```
+
+## Analysis 
+### Decision tree model: 
+
+We chose a decision tree methodology for this analysis due to its high interpretability, making it easy for policymakers to understand how each ward was classified as “at-risk” or “too late”. Each classification decision the model makes can be easily traced in a simple, visual format.
+
+The decision tree predicts whether a ward is likely to have high Airbnb density using ward-level characteristics of public transport accessibility, house prices, and point of interest density, which we then use to categorise each London ward into one of three groups:
+
+Too Late: Wards already heavily impacted by Airbnb, that are in the top 5% of airbnb's per 1000 households.
+
+At Risk: Wards predicted to have high Airbnb density but do not meet the threshold.
+
+Neither: Wards that don't fall into either category.
+
+We selected these variables as research has shown that higher-income neighborhoods, better transit access, and proximity to attractions significantly influence Airbnb activity (Jiao and Bai, 2020).
+
+```{python}
+# Calculate the 95th quantile for Airbnb density
+quantile = np.quantile(ward_airbnb['airbnb_per_1000_household'], 0.95)
+print(f"AirBnb Density 'Too-Late' Threshold: {quantile:.3} per 1000 households\n") 
+
+
+# Create a high Airbnb density indicator
+ward_airbnb['high_airbnb_dens'] = ward_airbnb['airbnb_per_1000_household'] >= quantile
+
+print(f"Average Ward AirBnb Density: {ward_airbnb['airbnb_per_1000_household'].mean():.3} per 1000 households ")
+print(f"Average Ward House Price: £{ward_airbnb['Median House Price (£) - 2014'].mean():,.0f} ")
+print(f"Average Ward Point of Interest Density: {ward_airbnb['poi_density'].mean():.3} ")
+print(f"Average Ward Public Transport Accessibility Score: {ward_airbnb['Average Public Transport Accessibility score - 2014'].mean():.3}")
+```
+
+```{python}
+# Prepare data for the decision tree
+X = ward_airbnb[['poi_density', 
+                 'Average Public Transport Accessibility score - 2014', 
+                 'Median House Price (£) - 2014', 
+                 'Median Household income estimate (2012/13)']]  # dependent variables
+y = ward_airbnb['high_airbnb_dens']
+
+# Train a decision tree
+tree = DecisionTreeClassifier(max_depth=2, random_state=42) # limited depth means model remains interpretable without overfitting, focusing on the most critical features.
+tree.fit(X, y)
+
+# Plot the decision tree
+plt.figure(figsize=(12, 8))
+plot_tree(tree, feature_names=X.columns, class_names=['Low Density', 'High Density'], filled=True, fontsize=10)
+plt.show()
+```
+
+#### Interpreting the Decision Tree
+
+The decision tree model identifies two scenarios where a ward is predicted to have a high Airbnb density:
+
+Transport Accessibility score of more than 6.75 and a Median House Price of more than £477,000
+or
+
+Transport Accessibility score of less than or equal to 6.75 and a point of interest density of more than 1.059 per hectare.
+The results suggest that high Airbnb density is linked to well-connected areas with above-average housing prices, though less connected areas can also attract Airbnb activity if they offer a high concentration of attractions and amenities.
+
+There are 9 wards that meet either of these conditions but do not exceed the ‘too late’ Airbnb density threshold, so we have categorised them as ‘at-risk’.
+
+```{python}
+# Add predictions to the GeoDataFrame
+ward_airbnb['prediction'] = tree.predict_proba(X)[:, 1] > 0.5
+
+# Generate the at-risk and too-late categories
+at_risk = ward_airbnb[(ward_airbnb['high_airbnb_dens'] == False) & (ward_airbnb['prediction'] == True)]
+too_late = ward_airbnb[ward_airbnb['high_airbnb_dens'] == True]
+
+ward_airbnb['status'] = 'neither'
+ward_airbnb.loc[ward_airbnb['Ward name'].isin(too_late['Ward name']), 'status'] = 'too_late'
+ward_airbnb.loc[ward_airbnb['Ward name'].isin(at_risk['Ward name']), 'status'] = 'at_risk'
+
+
+ward_names = at_risk['Ward name'].tolist()
+print(f"These at-risk wards are: {', '.join(ward_names)}")
+```
+
+```{python}
+# Visualise at risk wards with a choropleth map
+fig, ax = plt.subplots(1, 1, figsize=(10, 8))
+ward_airbnb.plot(column='status', 
+                 legend=True, 
+                 cmap='coolwarm', 
+                 ax=ax, 
+                 legend_kwds={'bbox_to_anchor': (1, 1)})
+plt.title("Ward Status by Airbnb Density")
+
+# Add scale bar
+scalebar = ScaleBar(1, location='lower left')  # 1 is the length of one pixel, adjust based on map scale
+ax.add_artist(scalebar)
+
+# Add North Arrow
+x, y, arrow_length = 0.05, 0.98, 0.1
+ax.annotate('N', xy=(x, y), xytext=(x, y-arrow_length),
+            arrowprops=dict(facecolor='black', width=5, headwidth=15),
+            ha='center', va='center', fontsize=20,
+            xycoords=ax.transAxes)
+
+boroughs.plot(
+    edgecolor='lightgrey',    
+    linewidth=1,         
+    ax=ax,
+    facecolor='none'      
+)
+plt.show()
+```
+
+## "At-Risk" wards and deprivation:
+
+To assess potential social impact of Airbnb in London, we analyzed the relationship between our Airbnb decision tree classifications and deprivation rank in wards. Deprivation rank is a relative measure comparing the level of deprivation across London wards. The lower the deprivation rank, the greater the deprivation score in the ward.
+
+## EDA:
+
+```{python}
+# List of variables to analyze
+variables = [
+    '(ID2010) - Rank of average score (within London) - 2010']
+
+# Custom order for the categories
+category_order = ['at_risk', 'too_late', 'neither']
+
+# Group the data by 'status' and calculate medians
+averages = ward_airbnb.groupby('status')[variables].mean()
+
+# Reindex to ensure the correct order of categories
+averages = averages.reindex(category_order)
+
+print(f"Mean Deprivation Rank for 'at-risk' wards: {averages.loc['at_risk'].iloc[0]:.0f}")
+print(f"Mean Deprivation Rank for 'too-late' wards: {averages.loc['too_late'].iloc[0]:.0f}")
+print(f"Mean Deprivation Rank for 'neither' wards: {averages.loc['neither'].iloc[0]:.0f}")
+```
+
+We begin with an exploratory data analysis of deprivation and ward classifications. The results shows the average deprivation rank between classification types. We see that the mean deprivation of “at-risk” wards is lower than “too-late” wards. This suggests that “at-risk” wards are not only desirable to Airbnb letters based on our classification, but are also particularly vulnerable to the negative impacts of Airbnb due to these areas being more deprived on average.
+
+### Spatial autocorrelation analysis:
+
+The question of remains where overlaps between “at-risk” wards and high deprivation occur. Spatial autocorrelation analysis of deprivation in London wards was employed to assess the spatial distribution of deprived wards and examine which “at-risk” wards lie within high deprivation clusters. Cluster analysis improves the generalizability of the study by identifying patterns of deprivation beyond individual wards with arbitrary boundaries.
+
+## Moran's I:
+
+```{python}
+# Create a spatial weights matrix based on Queen contiguity
+w = Queen.from_dataframe(ward_airbnb, use_index=False)
+
+# Ensure the weights are row-standardized
+w.transform = 'r'
+
+# Use the variable '(ID2010) - Rank of average score (within London) - 2010' for the Moran test
+y = ward_airbnb['(ID2010) - Rank of average score (within London) - 2010'].values
+
+# Calculate Global Moran's I
+moran = Moran(y, w)
+
+# Moran's I statistic
+moran_I = moran.I
+print(f"Global Moran's I: {moran_I}")
+
+# p-value for the test
+moran_p_value = moran.p_sim
+print(f"p-value: {moran_p_value}")
+```
+
+A Moran’s I test is conducted to establish that deprivation is not randomly distributed across wards in London. A Global Moran’s I statistic of 0.689 with a p-value less than 0.05 indicates there is statistically significant clustering of deprivation in London wards.
+
+## LISA
+
+```{python}
+# Ensure the weights are row-standardized
+w.transform = 'r'
+
+# Use the vulnerability variable for LISA analysis
+y = ward_airbnb['(ID2010) - Rank of average score (within London) - 2010'].values
+
+# Calculate Local Moran's I
+lisa = Moran_Local(y, w)
+
+# Add the LISA statistics to the GeoDataFrame
+ward_airbnb['moran_local'] = lisa.Is
+ward_airbnb['p_value'] = lisa.p_sim
+ward_airbnb['quadrant'] = lisa.q
+
+# Identify significant clusters at 0.05 level
+ward_airbnb['significant'] = ward_airbnb['p_value'] < 0.05
+
+# Define custom colormap for the LISA quadrants
+custom_cmap = ListedColormap(['navy', 'skyblue', 'darkred', 'pink'])  # Soft dark red, soft light blue, soft dark blue, soft light red
+
+# Plot the LISA results
+fig, ax = plt.subplots(1, 1, figsize=(10, 10))
+
+# Use 'quadrant' for the categorical color mapping
+ward_airbnb.plot(
+    column='quadrant',  # Use 'quadrant' for discrete categories
+    cmap=custom_cmap,    # Apply the custom colormap
+    ax=ax,
+    legend=False         # Disable the color bar
+)
+
+# Outline the wards with 'at_risk' status
+at_risk_wards = ward_airbnb[ward_airbnb['status'] == 'at_risk']
+at_risk_wards.plot(
+    edgecolor='yellow',    # Set black boundary for at-risk wards
+    linewidth=2,          # Thicker line width for visibility
+    ax=ax,
+    facecolor='none'      # No fill color, just outlines
+)
+
+# Outline the wards with 'at_risk' status
+boroughs.plot(
+    edgecolor='lightgrey',    # Set black boundary for at-risk wards
+    linewidth=1,          # Thicker line width for visibility
+    ax=ax,
+    facecolor='none'      # No fill color, just outlines
+)
+
+# Manually create legend with cluster labels
+legend_labels = ['High-High', 'Low-High', 'Low-Low', 'High-Low']
+colors = custom_cmap(range(4))  # Get colors from the custom colormap
+
+# Add the custom legend to the plot
+legend_elements = [Patch(color=colors[i], label=legend_labels[i]) for i in range(4)]
+ax.legend(handles=legend_elements, title='LISA Cluster')
+
+# Add scale bar
+scalebar = ScaleBar(1, location='lower left')  # 1 is the length of one pixel, adjust based on map scale
+ax.add_artist(scalebar)
+
+# Add North Arrow
+x, y, arrow_length = 0.05, 0.98, 0.1
+ax.annotate('N', xy=(x, y), xytext=(x, y-arrow_length),
+            arrowprops=dict(facecolor='black', width=5, headwidth=15),
+            ha='center', va='center', fontsize=20,
+            xycoords=ax.transAxes)
+
+plt.title('LISA Analysis of Deprivation Rank, Highlighting "At-Risk" Wards')
+plt.show()
+```
+
+Local indicators of spatial autocorrelation (LISA) statistics allow us to visualize the clustering of deprivation in London. Outlining “at-risk” wards in yellow, we see an overlap of deprivation clustering and “at-risk” classification for three wards in Islington, one in Hackney, one in Camden, and one in Hammersmith and Fulham.
+
+## Conclusion
+
+The study concludes there are 9 wards “at-risk” of becoming heavily saturated by Airbnb. Furthermore, six of these wards are located within clusters of high deprivation. City policy should focus on better regulating and limiting Airbnbs in the the boroughs of Islington, Hackney, and Hammersmith and Fulham to mitigate the negative impacts of Airbnb on vulnerable populations.
 
 ## Sustainable Authorship Tools
 
