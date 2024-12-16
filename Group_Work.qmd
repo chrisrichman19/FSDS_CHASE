@@ -46,11 +46,31 @@ jupyter:
     name: base
 ---
 
-```{python}
-# Dowload biobib
+## Declaration of Authorship {.unnumbered .unlisted}
 
-# Download harvard-cite-them-right.csl
-```
+We, CHASE, pledge our honour that the work presented in this assessment is our own. Where information has been derived from other sources, we confirm that this has been indicated in the work. Where a Large Language Model such as ChatGPT has been used we confirm that we have made its contribution to the final submission clear.
+
+Date: 16 December 2024
+
+Student Numbers: 
+24223425
+24097459
+24081453
+24217725
+22218425
+
+## Brief Group Reflection
+
+| What Went Well | What Was Challenging |
+| -------------- | -------------------- |
+| A              | B                    |
+| C              | D                    |
+
+## Priorities for Feedback
+
+Are there any areas on which you would appreciate more detailed feedback if we're able to offer it?
+
+{{< pagebreak >}}
 
 ```{python}
 #| echo: false
@@ -70,6 +90,12 @@ if os.path.exists(file):
 else:
     df = pd.read_parquet(f"{host}/{path}/{file}")
     df.to_parquet(file)
+```
+
+```{python}
+# Dowload biobib
+
+# Download harvard-cite-them-right.csl
 ```
 
 ```{python}
@@ -103,7 +129,6 @@ The InsideAirbnb was collected by Murray Cox, Tom Slee, and a team of collaborat
 
 
 Murray Cox and Tom Slee collected the InsideAirbnb data to critically assess the impact of Airbnb on housing markets, to provide unbiased independent publicly available data, and to facilitate the improved understanding of city authorities and regulatory bodies. Motivated by an observation of increasing entire-home listings and "multi-lister" hosts, Cox and Slee aimed to challenge Airbnb’s portrayal as a platform for casual home sharing, revealing that much of its revenue comes from commercial operators who are pushing out local residents by raising house prices @carville_meet_2019. (84)
-
 
 ```{python}
 #| output: asis
