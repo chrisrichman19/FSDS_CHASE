@@ -485,25 +485,19 @@ print(host_with_max_listings)
 
 ## 7. Drawing on your previous answers, and supporting your response with evidence (*e.g.* figures, maps, EDA/ESDA, and simple statistical analysis/models drawing on experience from, e.g., CASA0007), how *could* the InsideAirbnb data set be used to inform the regulation of Short-Term Lets (STL) in London? 
 
-State of airbnb in london
-
-Already a shit ton of airbnbs in london
-
-Draw on q6
-
-Airbnb has the potential to exacerbate the affordable housing crisis in London by reducing the availability of long-term rentals. The impact of Airbnb is of particular concern with regard to deprived households, whereby increased housing costs can contribute to displacement, making it more difficult for these residents to remain in their communities.
+Insights from the previous section highlight the commercialized reality of Airbnb in London despite official regulations. Failure to limit Airbnb has the potential to exacerbate the affordable housing crisis in London by reducing the availability of long-term rentals. The impact of Airbnb is of particular concern with regard to deprived households, whereby increased housing costs can contribute to displacement, making it more difficult for these residents to remain in their communities.
 
 Our analysis aims to answer the following questions: What wards are “at risk” of becoming an Airbnb hotspot? Of these wards, which are also the most vulnerable to the negative social impacts of Airbnb?
 
 We filtered the Airbnb dataset to focus on listings most relevant to neighbourhood impacts:
 
-Minimum Nights: Excluded stays over 30 nights to target short-term rentals.
+- Minimum Nights: Excluded stays over 30 nights to target short-term rentals.
 
-Recently Active: Included listings with reviews in the past six months for current relevance.
+- Recently Active: Included listings with reviews in the past six months for current relevance.
 
-Availability: Kept listings available at least 90 days annually to capture impactful activity.
+- Availability: Kept listings available at least 90 days annually to capture impactful activity.
 
-Room Type: Focused on “Entire home/apt” listings due to their greater effect on housing and neighbourhood dynamics.
+- Room Type: Focused on “Entire home/apt” listings due to their greater effect on housing and neighbourhood dynamics.
 
 ### Data Reading and Wrangling
 
