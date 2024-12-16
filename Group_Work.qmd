@@ -46,32 +46,6 @@ jupyter:
     name: base
 ---
 
-## Declaration of Authorship {.unnumbered .unlisted}
-
-We, CHASE, pledge our honour that the work presented in this assessment is our own. Where information has been derived from other sources, we confirm that this has been indicated in the work. Where a Large Language Model such as ChatGPT has been used we confirm that we have made its contribution to the final submission clear.
-
-Date: 16 December 2024
-
-Student Numbers: 
-24223425
-24097459
-24081453
-24217725
-22218425
-
-## Brief Group Reflection
-
-| What Went Well | What Was Challenging |
-| -------------- | -------------------- |
-| A              | B                    |
-| C              | D                    |
-
-## Priorities for Feedback
-
-Are there any areas on which you would appreciate more detailed feedback if we're able to offer it?
-
-{{< pagebreak >}}
-
 ```{python}
 #| echo: false
 # importing packages
@@ -202,8 +176,7 @@ As @mason_1986 explains, depending on how it is used, the data’s accuracy can 
 
  @mason_1986 argues that accessibility is also an ethical concern when it comes to using data. Not everyone has the technologies required to access the data, and even fewer have the intellectual skills to interpret and process the InsideAirbnb data. @dignazio_5_2020 explain that differential power has a silencing effect and that quantitative data can leave people out. Whilst InsideAirbnb’s mission is to “work towards a vision where communities are empowered with data and information” (@ia_home), its capability to do so is limited if the communities it seeks to empower lack the means to make use of the available data. The lack in transfer of data science skills and knowledge to the communities that InsideAirbnb seek to represent, and subsequent reliance on external researchers, mean that the imbalances in education and power will not be sufficiently addressed since the communities’ reality will only ever be told through the partial perspective of said researchers. (540)
 
-## 6. With reference to the InsideAirbnb data (*i.e.* using numbers, figures, maps, and descriptive statistics), what does an analysis of Hosts and the types of properties that they list suggest about the nature of Airbnb lettings in London? - Total 698 
-There is a possibility of making the base map of the airbnb density the price so that we save 150 words. So there wont be a bar graph of average price. 
+## 6. With reference to the InsideAirbnb data (*i.e.* using numbers, figures, maps, and descriptive statistics), what does an analysis of Hosts and the types of properties that they list suggest about the nature of Airbnb lettings in London?
 
 ```{python}
 # Reading Airbnb data:
@@ -255,40 +228,43 @@ filtered_airbnb = filtered_airbnb[filtered_airbnb["last_review"] >= six_months_a
 filtered_airbnb = filtered_airbnb[filtered_airbnb["availability_365"] >= 90]
 ```
 
+### Distribution of Short-Term Listings per Borough with Average Price 
+Airbnb’s short-term listings are clustered in boroughs surrounding the City of London. 14.4% of listings occur in Westminster, followed by 8.1% in Kensington and Chelsea, then 7.5% in Camden.
+
+Westminster, Kensington and Chelsea, and the City of London exhibit the highest average prices, while Bexley and Harrow have the lowest, reflecting significant variation in short-term rental costs across the city.
+
 ```{python}
-# Perform spatial join to assign each Airbnb to a borough:
+# Performing a spatial join to assign each Airbnb listing to a borough
+airbnb_in_boroughs = gpd.sjoin(filtered_airbnb, boroughs, how="inner", predicate="within")
 
-airbnb_in_boroughs = gpd.sjoin(
-    filtered_airbnb, boroughs, how="inner", predicate="within"
+# Calculating the average price of Airbnb listings in each borough
+borough_prices = (
+    airbnb_in_boroughs.groupby("NAME")["price"].mean().reset_index(name="Average_Price")
 )
 
-# Counting the number of Airbnb listings in each borough
-borough_counts = (
-    airbnb_in_boroughs.groupby("NAME").size().reset_index(name="Airbnb_Counts")
-)
+# Rounding the average prices and merging back with boroughs
+borough_prices["Average_Price"] = borough_prices["Average_Price"].round(0)
+boroughs = boroughs.merge(borough_prices, on="NAME", how="left")
 
-# Merging the counts back with the boroughs GeoDataFrame
-boroughs = boroughs.merge(borough_counts, left_on="NAME", right_on="NAME", how="left")
-
-# Filling NaN values with 0 (in case there are boroughs with no Airbnb listings)
-boroughs["Airbnb_Counts"] = boroughs["Airbnb_Counts"].fillna(0)
+# Filling in NaN values for boroughs without listings
+boroughs["Average_Price"] = boroughs["Average_Price"].fillna(0)
 
 # Plotting the choropleth map with Airbnb points
 fig, ax = plt.subplots(figsize=(12, 12))
 
-# Plotting the boroughs and shade based on Airbnb counts
+# Plotting the boroughs and shading based on Average Price
 choropleth = boroughs.plot(
-    column="Airbnb_Counts",
-    cmap="YlOrRd",  # Bright red -> orange -> yellow
+    column="Average_Price",
+    cmap="YlOrRd",  
     legend=True,
     edgecolor="black",
     linewidth=0.5,
     ax=ax,
 )
 
-# Resizing and customizing the colourbar legend
+# Customizing the colorbar for Average Price
 colorbar = choropleth.get_figure().get_axes()[1]
-colorbar.set_title("Listings\nCount", fontsize=12)
+colorbar.set_title("Avg Price\n(£)", fontsize=12)
 colorbar.text(1.3, 1.01, "High", fontsize=10, transform=ax.transAxes, ha="center")
 colorbar.text(1.3, -0.01, "Low", fontsize=10, transform=ax.transAxes, ha="center")
 
@@ -297,13 +273,13 @@ filtered_airbnb.plot(
     ax=ax, color="blue", markersize=5, alpha=0.5, label="Airbnb Listings"
 )
 
-# Addding a north arrow to the top-left corner
+# Adding a north arrow to the top-left corner
 north_arrow = AnchoredText(
     "N ↑", loc="upper left", prop=dict(size=15), frameon=False, borderpad=1
 )
 ax.add_artist(north_arrow)
 
-# Customizing the legend and placeing it on the right
+# Customizing the legend and placing it on the right
 airbnb_patch = mpatches.Patch(color="blue", label="Airbnb Listings")
 legend = ax.legend(
     handles=[airbnb_patch],
@@ -314,13 +290,11 @@ legend = ax.legend(
 )
 
 # Adding title and labels
-plt.title(
-    "Distribution of Short Term Airbnb Listings in London Boroughs(2024)", fontsize=16
-)
+plt.title("Average Price of Short-Term Airbnb Listings in London Boroughs (2024)", fontsize=16)
 ax.set_xlabel("Longitude", fontsize=12)
 ax.set_ylabel("Latitude", fontsize=12)
 
-# Final adjustments and showing the map
+# Final adjustments and display the map
 plt.tight_layout()
 plt.show()
 ```
@@ -346,10 +320,6 @@ ward_profiles = ward_profiles[
     ]
 ]
 ```
-
-### Calculating Percent of Short-Term Listings per Borough
-
-Airbnb’s short-term listings are clustered in boroughs surrounding the City of London. 14.4% of listings occur in Westminster, followed by 8.1% in Kensington and Chelsea, then 7.5% in Camden.
 
 ```{python}
 # Listing all Airbnb counts and calculating percentages
@@ -382,52 +352,6 @@ print(borough_counts[["NAME", "Airbnb_Counts", "Percentage"]])
 # Save the result to a CSV file (optional)
 borough_counts.to_csv("airbnb_percentage_by_borough.csv", index=False)
 ```
-
-### Calculating the Average Price of Airbnb Listings in London Boroughs
-
-```{python}
-# Calculating the average price of Airbnb listings in each borough
-borough_prices = (
-    airbnb_in_boroughs.groupby("NAME")["price"].mean().reset_index(name="Average_Price")
-)
-
-# Rounding the average price to whole numbers
-borough_prices["Average_Price"] = borough_prices["Average_Price"].round(0)
-
-# Sorting the boroughs by average price for a cleaner plot
-borough_prices = borough_prices.sort_values(by="Average_Price", ascending=False)
-
-# Debugging: Printing the first few rows of average prices
-print("Average Price of Airbnb Listings per Borough:")
-print(borough_prices.head())
-
-# Plotting the average price as a bar graph
-plt.figure(figsize=(12, 8))
-plt.bar(
-    borough_prices["NAME"],
-    borough_prices["Average_Price"],
-    color="skyblue",
-    edgecolor="black",
-)
-
-# Adding titles and labels
-plt.title("Average Price of Airbnb Listings in London Boroughs (2024)", fontsize=16)
-plt.xlabel("Borough", fontsize=12)
-plt.ylabel("Average Price (£)", fontsize=12)
-plt.xticks(rotation=45, ha="right", fontsize=10)
-
-# Adding data labels on top of each bar
-for i, value in enumerate(borough_prices["Average_Price"]):
-    plt.text(i, value + 5, f"{int(value)}", ha="center", va="bottom", fontsize=8)
-
-# Adjusting layout for better appearance
-plt.tight_layout()
-
-# Showing the output
-plt.show()
-```
-
-Westminster, Kensington and Chelsea, and the City of London exhibit the highest average prices, while Bexley and Harrow have the lowest, reflecting significant variation in short-term rental costs across the city.
 
 ### Properties Available for over 90+ Nights
 
