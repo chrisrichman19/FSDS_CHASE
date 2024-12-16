@@ -48,9 +48,25 @@ jupyter:
 
 ```{python}
 #| echo: false
+# importing packages
 import os
-
 import pandas as pd
+import geopandas as gpd
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import gdown
+from esda import Moran, Moran_Local
+from libpysal.weights import Queen
+from matplotlib.colors import ListedColormap
+from matplotlib.offsetbox import AnchoredText
+from matplotlib_scalebar.scalebar import ScaleBar
+from scipy import stats
+from shapely.geometry import Point
+from sklearn.metrics import confusion_matrix
+from sklearn.tree import DecisionTreeClassifier, plot_tree
 ```
 
 ```{python}
@@ -70,25 +86,6 @@ else:
 # Dowload biobib
 
 # Download harvard-cite-them-right.csl
-```
-
-```{python}
-# importing packages
-import geopandas as gpd
-import matplotlib.patches as mpatches
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import seaborn as sns
-from esda import Moran, Moran_Local
-from libpysal.weights import Queen
-from matplotlib.colors import ListedColormap
-from matplotlib.offsetbox import AnchoredText
-from matplotlib_scalebar.scalebar import ScaleBar
-from scipy import stats
-from shapely.geometry import Point
-from sklearn.metrics import confusion_matrix
-from sklearn.tree import DecisionTreeClassifier, plot_tree
 ```
 
 ## 1. Who collected the InsideAirbnb data?
@@ -145,75 +142,6 @@ Another ethical issue is the accuracy of the data being provided. InsideAirbnb s
 As @mason_1986 explains, depending on how it is used, the data’s accuracy can raise ethical concerns. InsideAirbnb’s data is “used regularly over the last year by city analysts, journalists, academics and hospitality analysts” @cox_how_airbnb. The use of such data by city analysts will impact the lives of those that fall under the jurisdiction of the city authority, raising the ethical consideration of the data’s accuracy due to the harm that may be caused from the use of Inside Airbnb’s potentially misrepresentative data. This is of further concern when those analysing the data do not fully understand the process through which it has been collected and the limits this brings, causing potentially significant economic and societal impacts if InsideAirbnb’s data is not used mindfully.  
 
  @mason_1986 argues that accessibility is also an ethical concern when it comes to using data. Not everyone has the technologies required to access the data, and even fewer have the intellectual skills to interpret and process the InsideAirbnb data. @dignazio_5_2020 explain that differential power has a silencing effect and that quantitative data can leave people out. Whilst InsideAirbnb’s mission is to “work towards a vision where communities are empowered with data and information” @ia_home, its capability to do so is limited if the communities it seeks to empower lack the means to make use of the available data. The lack in transfer of data science skills and knowledge to the communities that InsideAirbnb seek to represent, and subsequent reliance on external researchers, mean that the imbalances in education and power will not be sufficiently addressed since the communities’ reality will only ever be told through the partial perspective of said researchers. (540)
-
-```{python}
-# Reading Airbnb data
-
-airbnb = pd.read_csv("data/20240614-London-listings.csv.gz")
-
-airbnb = gpd.GeoDataFrame(
-    airbnb,
-    geometry=gpd.points_from_xy(airbnb.longitude, airbnb.latitude),
-    crs="EPSG:4326",
-).to_crs(epsg=27700)
-```
-
-```{python}
-# filtering Airbnb data
-from datetime import datetime, timedelta
-
-# Filter min. nights
-filtered_airbnb = airbnb[airbnb.minimum_nights <= 30]
-
-## To determine recently active sites
-
-# Convert 'last_review' to datetime format
-filtered_airbnb.loc[:, "last_review"] = pd.to_datetime(
-    filtered_airbnb["last_review"], errors="coerce"
-)
-
-# Set the reference date (for reproducibility)
-reference_date = datetime(2024, 11, 28)
-
-# Calculate the threshold date (6 months before the reference date)
-six_months_ago = reference_date - timedelta(days=6 * 30)
-
-# Filter the data
-filtered_airbnb = filtered_airbnb[filtered_airbnb["last_review"] >= six_months_ago]
-
-filtered_airbnb = filtered_airbnb[filtered_airbnb["availability_365"] >= 90]
-```
-
-```{python}
-# London Ward profiles
-ward_profiles = pd.read_csv("data/ward-profiles.csv", encoding="latin1")
-
-# Including only selected variables
-ward_profiles = ward_profiles[
-    [
-        "Ward name",
-        "New code",
-        "Average Public Transport Accessibility score - 2014",
-        "Median House Price (£) - 2014",
-        "Median Household income estimate (2012/13)",
-        "(ID2010) - Rank of average score (within London) - 2010",
-        "(ID2010) % of LSOAs in worst 50% nationally - 2010",
-        "Average GCSE capped point scores - 2014",
-        "% BAME - 2011",
-        "Number of Household spaces - 2011",
-    ]
-]
-```
-
-```{python}
-# Ward geometry-data
-wards = gpd.read_file("data/London-wards-2011/London_Ward_CityMerged.shp").to_crs(
-    epsg=27700
-)[["GSS_CODE", "HECTARES", "geometry"]]
-boroughs = gpd.read_file(
-    "data/statistical-gis-boundaries-london/ESRI/London_Borough_Excluding_MHW.shp"
-).to_crs(epsg=27700)
-```
 
 ## 6. With reference to the InsideAirbnb data (*i.e.* using numbers, figures, maps, and descriptive statistics), what does an analysis of Hosts and the types of properties that they list suggest about the nature of Airbnb lettings in London? - Total 698 
 There is a possibility of making the base map of the airbnb density the price so that we save 150 words. So there wont be a bar graph of average price. 
@@ -621,10 +549,6 @@ install_and_import("gdown")
 ```
 
 ```{python}
-import os
-
-import gdown
-
 # Google Drive file URL and local file destination
 file_url = "https://drive.google.com/uc?id=1Abf3I-ez_imd3hzAAmPu8UGcU8dH9lWK"
 destination = "London_Points_Of_Interest.gpkg"
