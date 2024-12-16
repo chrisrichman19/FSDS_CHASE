@@ -56,7 +56,6 @@ import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import gdown
 from esda import Moran, Moran_Local
 from libpysal.weights import Queen
 from matplotlib.colors import ListedColormap
@@ -154,9 +153,8 @@ As @mason_1986 explains, depending on how it is used, the data’s accuracy can 
 ## 6. With reference to the InsideAirbnb data (*i.e.* using numbers, figures, maps, and descriptive statistics), what does an analysis of Hosts and the types of properties that they list suggest about the nature of Airbnb lettings in London? - Total 698 
 There is a possibility of making the base map of the airbnb density the price so that we save 150 words. So there wont be a bar graph of average price. 
 
-
 ```{python}
-# Reading Airbnb data
+# Reading Airbnb data:
 
 airbnb = pd.read_csv("FSDS_CHASE-main/data/20240614-London-listings.csv.gz")
 
@@ -168,7 +166,8 @@ airbnb = gpd.GeoDataFrame(
 ```
 
 ```{python}
-# Ward geometry-data
+# Ward geometry-data:
+
 wards = gpd.read_file("FSDS_CHASE-main/data/London-wards-2011/London_Ward_CityMerged.shp").to_crs(
     epsg=27700
 )[["GSS_CODE", "HECTARES", "geometry"]]
@@ -178,7 +177,8 @@ boroughs = gpd.read_file(
 ```
 
 ```{python}
-# filtering Airbnb data
+# Filtering Airbnb data:
+
 from datetime import datetime, timedelta
 
 # Filter min. nights
@@ -204,7 +204,8 @@ filtered_airbnb = filtered_airbnb[filtered_airbnb["availability_365"] >= 90]
 ```
 
 ```{python}
-# Perform spatial join to assign each Airbnb to a borough
+# Perform spatial join to assign each Airbnb to a borough:
+
 airbnb_in_boroughs = gpd.sjoin(
     filtered_airbnb, boroughs, how="inner", predicate="within"
 )
@@ -273,7 +274,8 @@ plt.show()
 ```
 
 ```{python}
-# London Ward profiles
+# London Ward profiles:
+
 ward_profiles = pd.read_csv("FSDS_CHASE-main/data/ward-profiles.csv", encoding="latin1")
 
 # Including only selected variables
@@ -506,14 +508,14 @@ Room Type: Focused on “Entire home/apt” listings due to their greater effect
 ### Data Reading and Wrangling
 
 ```{python}
-# Filtering Data again as Q6 has other filters in place
+# Filtering Data again (Q6 has other filters in place):
+
 from datetime import datetime, timedelta
 
 # Filter min. nights
 filtered_airbnb = airbnb[airbnb.minimum_nights <= 30]
 
-## To determine recently active sites
-
+# To determine recently active sites
 # Convert 'last_review' to datetime format
 filtered_airbnb.loc[:, "last_review"] = pd.to_datetime(
     filtered_airbnb["last_review"], errors="coerce"
@@ -534,7 +536,8 @@ filtered_airbnb = filtered_airbnb[filtered_airbnb["room_type"] == "Entire home/a
 ```
 
 ```{python}
-# Reading in Point of Interest data
+# Reading in Point of Interest data:
+
 import importlib.util
 import subprocess
 import sys
@@ -551,14 +554,15 @@ def install_and_import(package):
     except Exception as e:
         print(f"An error occurred while checking or installing {package}: {e}")
 
-
-install_and_import("gdown")
-
 # Link incase this does not work: https://drive.google.com/uc?id=1Abf3I-ez_imd3hzAAmPu8UGcU8dH9lWK
 ```
 
 ```{python}
-# Google Drive file URL and local file destination
+# Google Drive file URL and local file destination:
+
+install_and_import("gdown")
+import gdown
+
 file_url = "https://drive.google.com/uc?id=1Abf3I-ez_imd3hzAAmPu8UGcU8dH9lWK"
 destination = "London_Points_Of_Interest.gpkg"
 
@@ -585,7 +589,8 @@ poi_data = gdf[gdf["classname"].isin(desired_classes)]
 ```
 
 ```{python}
-# Merging files together
+# Merging files together:
+
 ward_airbnb = wards.merge(
     ward_profiles, left_on="GSS_CODE", right_on="New code", how="left"
 )
@@ -594,19 +599,21 @@ ward_airbnb = gpd.GeoDataFrame(ward_airbnb, crs="EPSG:27700")
 
 ward_airbnb["Borough"] = ward_airbnb["Ward name"].str.split(" - ").str[0]
 
-# creating poi_density variable
+# Creating poi_density variable
 ward_airbnb["n_poi"] = ward_airbnb.geometry.apply(
     lambda geom: sum(poi_data.geometry.intersects(geom))
 )
 ward_airbnb["poi_density"] = ward_airbnb["n_poi"] / ward_airbnb["HECTARES"]
 
-# intersecting airbnb points and ward data
-# creating airbnb per 1000 households variables
+# Intersecting airbnb points and ward data
 ward_airbnb["n_airbnb"] = ward_airbnb.geometry.apply(
     lambda geom: sum(filtered_airbnb.geometry.intersects(geom))
 )
+
+# Calculate Airbnb density
 ward_airbnb["airbnb_density"] = ward_airbnb["n_airbnb"] / ward_airbnb["HECTARES"]
-# ward_airbnb["airbnb_per_1000"] = (ward_airbnb["n_airbnb"] / ward_airbnb["Population - 2015"])*1000
+
+# Creating airbnb per 1000 households variables
 ward_airbnb["airbnb_per_1000_household"] = (
     ward_airbnb["n_airbnb"] / ward_airbnb["Number of Household spaces - 2011"]
 ) * 1000
