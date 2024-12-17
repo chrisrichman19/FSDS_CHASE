@@ -116,12 +116,6 @@ if not os.path.exists(destination):
     gdown.download(file_url, destination, quiet=True)
 ```
 
-```{python}
-# Dowload biobib
-
-# Download harvard-cite-them-right.csl
-```
-
 ## Declaration of Authorship {.unnumbered .unlisted}
 We, CHASE, pledge our honour that the work presented in this assessment is our own. Where information has been derived from other sources, we confirm that this has been indicated in the work. Where a Large Language Model such as ChatGPT has been used we confirm that we have made its contribution to the final submission clear.
 
@@ -412,26 +406,26 @@ room_type_counts.columns = ["Room Type", "Count"]
 #print(room_type_counts)
 
 # Plotting the room types as a bar graph
-plt.figure(figsize=(8, 6))
-plt.bar(
-    room_type_counts["Room Type"],
-    room_type_counts["Count"],
-    color="orange",
-    edgecolor="black",
-)
+#plt.figure(figsize=(8, 6))
+#plt.bar(
+#    room_type_counts["Room Type"],
+ #   room_type_counts["Count"],
+  #  color="orange",
+   # edgecolor="black",
+#)
 
 # Adding titles and labels 
-plt.title("Room Types Rented for 90+ Nights", fontsize=16)
-plt.xlabel("Room Type", fontsize=12)
-plt.ylabel("Number of Properties", fontsize=12)
+#plt.title("Room Types Rented for 90+ Nights", fontsize=16)
+#plt.xlabel("Room Type", fontsize=12)
+#plt.ylabel("Number of Properties", fontsize=12)
 
 # Adding data labels on top of each bar
-for i, value in enumerate(room_type_counts["Count"]):
-    plt.text(i, value + 5, str(value), ha="center", va="bottom", fontsize=10)
+#for i, value in enumerate(room_type_counts["Count"]):
+    #plt.text(i, value + 5, str(value), ha="center", va="bottom", fontsize=10)
 
 # Displaying the graph
-plt.tight_layout()
-plt.show()
+#plt.tight_layout()
+#plt.show()
 ```
 
 GLA have discovered that hosts with multiple listings on Airbnb are more likely to be using the platform for commercial purposes (@balogun_2024, 2024, p.25). The total number of hosts with two or more listings is 6253 with the average number of listings per host being 7.06. The maximum number of listings is 1253 that belong to Sykes Holiday Cottages. This shows that the Airbnb market in London is commercialised and does not adhere to the GLA 90-night policy limit. 
