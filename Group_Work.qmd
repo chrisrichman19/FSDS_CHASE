@@ -707,6 +707,8 @@ print(f"p-value: {moran_p_value}")
 A Moran’s I test is conducted to establish that deprivation is not randomly distributed across wards in London. A Global Moran’s I statistic of 0.689 with a p-value less than 0.05 indicates there is statistically significant clustering of deprivation in London wards.
 
 ```{python}
+# Disclaimer: ChatGPT used to help with plotting map
+
 # Calculate Local Moran's I
 lisa = Moran_Local(y, w)
 
