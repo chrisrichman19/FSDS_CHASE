@@ -681,8 +681,6 @@ We begin with an exploratory data analysis of deprivation and ward classificatio
 
 Spatial autocorrelation analysis of deprivation in London wards was employed to assess the spatial distribution of deprived wards and examine which “at-risk” wards lie within high deprivation clusters. Cluster analysis improves the generalizability of the study by identifying patterns of deprivation beyond individual wards with arbitrary boundaries.
 
-Moran's I:
-
 ```{python}
 # Create a spatial weights matrix based on Queen contiguity
 w = Queen.from_dataframe(ward_airbnb, use_index=False)
