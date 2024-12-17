@@ -138,8 +138,6 @@ Student Numbers:
 | -------------- | -------------------- |
 | A              | B                    |
 | C              | D                    |
-## Priorities for Feedback
-Are there any areas on which you would appreciate more detailed feedback if we're able to offer it?
 
 ## 1. Who collected the InsideAirbnb data?
 
