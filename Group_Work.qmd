@@ -136,8 +136,8 @@ Student Numbers:
 ## Brief Group Reflection
 | What Went Well | What Was Challenging |
 | -------------- | -------------------- |
-| A              | B                    |
-| C              | D                    |
+| Collaboration              | Writing within word-count.|
+| Evenly split workload            | Merging with git                                        |
 
 ## 1. Who collected the InsideAirbnb data?
 
