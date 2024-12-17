@@ -116,6 +116,12 @@ if not os.path.exists(destination):
     gdown.download(file_url, destination, quiet=True)
 ```
 
+```{python}
+# Dowload biobib
+
+# Download harvard-cite-them-right.csl
+```
+
 ## Declaration of Authorship {.unnumbered .unlisted}
 We, CHASE, pledge our honour that the work presented in this assessment is our own. Where information has been derived from other sources, we confirm that this has been indicated in the work. Where a Large Language Model such as ChatGPT has been used we confirm that we have made its contribution to the final submission clear.
 
@@ -144,57 +150,54 @@ Are there any areas on which you would appreciate more detailed feedback if we'r
 ## 1. Who collected the InsideAirbnb data?
 
 
-The InsideAirbnb was collected by Murray Cox, Tom Slee, and a team of collaborators working to empower communities through data. Murray Cox is an Australian community artist, activist and photo- journalist who "uses data, media, and technology for social change" (@ia_about). 
+InsideAirbnb was collected by Murray Cox, Tom Slee, and a team of collaborators working to empower communities through data (@ia_about). 
 
 
 ## 2. Why did they collect the InsideAirbnb data?
 
 
 
-Murray Cox and Tom Slee collected the InsideAirbnb data to critically assess the impact of Airbnb on housing markets, to provide unbiased independent publicly available data, and to facilitate the improved understanding of city authorities and regulatory bodies. Motivated by an observation of increasing entire-home listings and "multi-lister" hosts, Cox and Slee aimed to challenge Airbnb’s portrayal as a platform for casual home sharing, revealing that much of its revenue comes from commercial operators who are pushing out local residents by raising house prices (@carville_meet_2019). 
+Murray Cox and Tom Slee collected the data to critically assess the impact of Airbnb on housing markets, to provide unbiased independent publicly available data, and to facilitate the improved understanding of city authorities and regulatory bodies. Motivated by an observation of increasing entire-home listings and "multi-lister" hosts, they aimed to challenge Airbnb’s portrayal as a platform for casual home sharing, revealing that much of its revenue comes from commercial operators who are pushing out local residents by raising house prices (@carville_meet_2019). 
 
 ## 3. How did they collect it?
 
-Inside Airbnb’s data is collected through web-scraping, using public information from Airbnb's website. There were two main stages of data collection:
+The data is collected through web-scraping, using public information from Airbnb's website. Two main stages of data collection:
 Identify listings for chosen set of coordinates.
-Collect the following information for each listing: listing type, approximate address, number of reviews and average review score, capacity, numbers of bedrooms and bathrooms, price, and coordinates.
-Data is periodically scraped for each location from the Airbnb website (@adamiak_airbnb_2019, @ia_home).
+Collect the following information for each listing: listing type, approximate address, number of reviews and average review score, capacity, numbers of bedrooms and bathrooms, price, and coordinates (@adamiak_airbnb_2019, @ia_home).
 
 
 ## 4. How does the method of collection (Q3) impact the completeness and/or accuracy of the InsideAirbnb data? How well does it represent the process it seeks to study, and what wider issues does this raise?
 
 
-Inside Airbnb (IA) data is limited as scraping can only take place using publicly available data; that which is allowed in Airbnb’s robots.txt file. Datasets are therefore only an approximation of the Airbnb market and might not be suitable for use by those requiring more detailed understanding of Airbnb’s effect on housing markets eg. policymakers.	
+The data is limited as scraping can only take place using publicly available data; which is allowed in Airbnb’s robots.txt file. Datasets are therefore only an approximation of the Airbnb market and might not be suitable for use by those requiring detailed understanding of Airbnb’s effect on housing markets.
 
-Using IA’s data relies solely on the data of Airbnb which only provides an estimation of the short term rental market. Some listings may be booked directly with hosts to avoid Airbnb’s additional charges, and therefore might appear unavailable on Airbnb, but are actually booked; distorting the true effect of Airbnb on the housing market (@prentice_2023).
+Using IA’s data relies solely on Airbnb's data, which only provides an estimation of the short-term rental market. Listings may be booked directly with hosts to avoid Airbnb’s additional charges, appearing unavailable on Airbnb but actually booked, distorting the true effect of Airbnb on the housing market (@prentice_2023).
     
-As acknowledged by IA, listings’ geographic locations are not available, meaning that analysis must be aggregated to a higher level. This limits the ability to conduct detailed analysis of Airbnb’s effect on the housing market, as would be the case when conducting price analysis using distance to points of interest as explanatory variables (@todd_2022).
+IA programmer (@tslee_airbnbdata) states that ‘no guarantees are made about the quality of data obtained using this script, statistically or about an individual page,’ encouraging researchers to check validity on their own. The script was last updated in 2019 (@tslee_airbnbdata), potentially resulting in inaccurate listing counts following changes to Airbnb’s data structure, reducing the useability of data to assess housing market impacts.
 
-IA programmer (@tslee_airbnbdata) states that ‘no guarantees are made about the quality of data obtained using this script, statistically or about an individual page,’ encouraging researchers to check validity on their own. Furthermore, the script was last updated in 2019 (@tslee_airbnbdata), potentially resulting in inaccurate listing counts following changes to Airbnb’s data structure, reducing the useability of the data to assess housing market impacts.
+The IA data is therefore not ‘raw’, it is “verified, cleansed, analyzed and aggregated” @ia_home, which introduces bias. Data cleaning erases detail and perspective, causing an issues when those analysing the data lack understanding of the context in which it was produced (@dignazio_5_2020). 
 
-The IA data is therefore not ‘raw’, it is “verified, cleansed, analyzed and aggregated” @ia_home, meaning the data is biased. Cleaning and aggregation removes detail  and certain perspectives from the data. This erasure is especially significant when those working, processing and analysing the data are not aware of the context in which it was created (@dignazio_5_2020).
-
-Completeness and accuracy challenges raise the question of whether researchers should rely solely on data collected by one organisation, from one website, to analyse the impact of an industry. By focusing solely on the data provided by IA researchers will come to biased and partial conclusions that are influenced by the views of IA’s creators. 
+Completeness and accuracy challenges raise the question of whether researchers should rely solely on data collected by one organisation, from one website, to analyse the impact of an industry. By focusing on solely data provided by IA researchers will come to biased and partial conclusions that are influenced by the views of IA’s creators. 
 
 
 ## 5. What ethical considerations does the use of the InsideAirbnb data raise? 
 
 
-Terms of Service outline the contract through which users and Airbnb interact, specifying users must not scrape or use scrapers or crawlers to access or collect data (@airbnb_terms).
+Terms of Service outline the contract through which users and Airbnb interact, specifying users must not scrape to access or collect data (@airbnb_terms).
 
 From the perspective of an Airbnb user, having agreed to the Terms of Service, they expect that their data is protected. However, as InsideAirbnb demonstrates, these agreements do not guarantee that data will not be collected. Instead, Airbnb are relying on the conscience of the programmers to adhere to the Terms of Service and robot.txt files to guarantee privacy to their users. 
 
-The Terms of Service is contradictory to the robot.txt file- the former specifies not scraping data at all, the latter could be considered as permission to scrape certain data by explicitly prohibiting access to other data.
+The Terms of Service contradicts the robot.txt file- the former specifies not scraping data at all, and the latter could be considered as permission to scrape certain data by explicitly prohibiting access to other data.
 
-The robot.txt file is however non-binding, so relies on the programmer’s adherence, which could cause harm to Airbnb’s users and customers if not followed.
+The robot.txt file is non-binding, so relies on the programmer’s adherence, which could cause harm to Airbnb’s users and customers if not followed.
 
-InsideAirbnb data is collected through web scraping, in contradiction to the Terms of Service, so despite the efforts taken by IA to anonymise the data, Airbnb users have not given their informed consent for any data to be collected in this way, nor have they consented to their data being used by third parties in this manner, raising ethical considerations over the use of data provided by IA (@krotov_2020).
+InsideAirbnb data is collected through web scraping, which violates Airbnb’s Terms of Service. Although IA takes steps to anonymise the data, Airbnb users have not provided informed consent for its collection or use by third parties. This raises ethical concerns regarding the legitimacy and responsible use of IA data (@krotov_2020).
 
 Another ethical issue is the accuracy of the data being provided. InsideAirbnb state that accuracy of the information compiled from the Airbnb site is not the responsibility of Inside Airbnb. Due care has been taken with any processing and analysis. - (@ia_home).
 
-As @mason_1986 explains, depending on how it is used, the data’s accuracy can raise ethical concerns. InsideAirbnb’s data is “used regularly over the last year by city analysts, journalists, academics and hospitality analysts” @cox_how_airbnb. The use of such data by city analysts will impact the lives of those that fall under the jurisdiction of the city authority, raising the ethical consideration of the data’s accuracy due to the harm that may be caused from the use of Inside Airbnb’s potentially misrepresentative data. This is of further concern when those analysing the data do not fully understand the process through which it has been collected and the limits this brings, causing potentially significant economic and societal impacts if InsideAirbnb’s data is not used mindfully.  
+As @mason_1986 explains, depending on how it is used, the data’s accuracy can raise ethical concerns. InsideAirbnb’s data is “used regularly over the last year by city analysts, journalists, academics and hospitality analysts” @cox_how_airbnb. Data use by city analysts will impact the lives of those that fall under the jurisdiction of the city authority, raising the ethical consideration of the data’s accuracy due to the harm that may be caused from the use of Inside Airbnb’s potentially misrepresentative data. This is of further concern when those analysing the data do not fully understand the process through which it has been collected and the limits this brings, causing potentially significant economic and societal impacts if InsideAirbnb’s data is not used mindfully.  
 
- @mason_1986 argues that accessibility is also an ethical concern when it comes to using data. Not everyone has the technologies required to access the data, and even fewer have the intellectual skills to interpret and process the InsideAirbnb data. @dignazio_5_2020 explain that differential power has a silencing effect and that quantitative data can leave people out. Whilst InsideAirbnb’s mission is to “work towards a vision where communities are empowered with data and information” (@ia_home), its capability to do so is limited if the communities it seeks to empower lack the means to make use of the available data. The lack in transfer of data science skills and knowledge to the communities that InsideAirbnb seek to represent, and subsequent reliance on external researchers, mean that the imbalances in education and power will not be sufficiently addressed since the communities’ reality will only ever be told through the partial perspective of said researchers. 
+ @mason_1986 argues that accessibility is also an ethical concern when it comes to using data. Not everyone has the technologies required to access the data, and even fewer have the intellectual skills to interpret and process the InsideAirbnb data. @dignazio_5_2020 explains that differential power has a silencing effect and quantitative data can leave people out. Whilst InsideAirbnb’s mission is to “work towards a vision where communities are empowered with data and information” (@ia_home), its capability to do so is limited if the communities it seeks to empower lack the means to make use of the available data. The lack in transfer of data science skills and knowledge to the communities that InsideAirbnb seek to represent, and subsequent reliance on external researchers, means that the imbalances in education and power will not be sufficiently addressed since the communities’ reality will only ever be told through the partial perspective of said researchers. 
 
 ## 6. With reference to the InsideAirbnb data (*i.e.* using numbers, figures, maps, and descriptive statistics), what does an analysis of Hosts and the types of properties that they list suggest about the nature of Airbnb lettings in London?
 
@@ -248,7 +251,7 @@ filtered_airbnb = filtered_airbnb[filtered_airbnb["last_review"] >= six_months_a
 filtered_airbnb = filtered_airbnb[filtered_airbnb["availability_365"] >= 90]
 ```
 
-### Distribution of Short-Term Listings per Borough with Average Price 
+### Distribution of Short-Term Listings
 
 ```{python}
 # Creating a distribution of airbnb map with average price as colour base
@@ -317,9 +320,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-Airbnb’s short-term listings are clustered in boroughs surrounding the City of London. 14.4% of listings occur in Westminster, followed by 8.1% in Kensington and Chelsea, then 7.5% in Camden.
+Airbnb’s short-term listings are clustered in boroughs surrounding the City of London. 14.4% of listings occur in Westminster, followed by 8.1% in Kensington and Chelsea.
 
-Westminster, Kensington and Chelsea, and the City of London exhibit the highest average prices, while Bexley and Harrow have the lowest, reflecting significant variation in short-term rental costs across the city.
+Westminster and Kensington and Chelsea exhibit the highest average prices, while Bexley and Harrow have the lowest, reflecting significant variation in short-term rental costs across the city.
 
 ```{python}
 # London Ward profiles:
@@ -370,8 +373,8 @@ borough_counts = borough_counts.sort_values(by="Percentage", ascending=False)
 
 ### Properties Available for over 90+ Nights
 
-A concern that Airbnb imposes in London is ‘commercialisation’. The Greater London Authority (GLA) states that “it creates a risk of residential properties being used as letting businesses without the required planning permission and protections for neighbours” (@balogun_2024, p.26). To avoid this issue, homeowners are required to obtain planning permission if they intend to use residential properties for short-term accommodation exceeding 90 nights.
-In the current 2024 analysis, we found that there is a total of 6254 listings available for over 90+ nights. Westminster has 15.7% of those listings, Kensington and Chelsea at 9%, and Tower Hamlets at 7.5%.
+A concern Airbnb imposes in London is ‘commercialisation’. The Greater London Authority (GLA) states that “it creates a risk of residential properties being used as letting businesses without the required planning permission and protections for neighbours” (@balogun_2024, p.26). To avoid this issue, homeowners are required to obtain planning permission if they intend to use residential properties for short-term accommodation exceeding 90 nights.
+In the current 2024 analysis, there is a total of 6254 listings available for over 90+ nights. Westminster has 15.7% of those listings and Kensington and Chelsea at 9%.
 
 ```{python}
 # Filtering listings for 90+ nights of availability
@@ -430,8 +433,6 @@ for i, value in enumerate(room_type_counts["Count"]):
 plt.tight_layout()
 plt.show()
 ```
-
-The most common ‘room types’ available for over 90+ nights are entire homes and apartments.
 
 GLA have discovered that hosts with multiple listings on Airbnb are more likely to be using the platform for commercial purposes (@balogun_2024, 2024, p.25). The total number of hosts with two or more listings is 6253 with the average number of listings per host being 7.06. The maximum number of listings is 1253 that belong to Sykes Holiday Cottages. This shows that the Airbnb market in London is commercialised and does not adhere to the GLA 90-night policy limit. 
 
@@ -550,7 +551,6 @@ ward_airbnb["airbnb_per_1000_household"] = (
 ) * 1000
 ```
 
-### Analysis 
 #### Decision Tree Model 
 
 We chose a decision tree methodology for this analysis due to its high interpretability, making it easy for policymakers to understand how each ward was classified as “at-risk” or “too late”. Each classification decision the model makes can be easily traced in a simple, visual format.
@@ -630,7 +630,7 @@ The decision tree model identifies two scenarios where a ward is predicted to ha
 
 The results suggest that high Airbnb density is linked to well-connected areas with above-average housing prices, though less connected areas can also attract Airbnb activity if they offer a high concentration of attractions and amenities.
 
-There are 9 wards that meet either of these conditions but do not exceed the ‘too late’ Airbnb density threshold, so we have categorised them as ‘at-risk’.
+There are 9 wards that meet either of these conditions but do not exceed the ‘too late’ Airbnb density threshold, so we categorised as ‘at-risk’.
 
 ```{python}
 # Add predictions to the GeoDataFrame
@@ -653,7 +653,7 @@ ward_airbnb.loc[ward_airbnb["Ward name"].isin(at_risk["Ward name"]), "status"] =
 
 ### "At-Risk" Wards and Deprivation
 
-To assess potential social impact of Airbnb in London, we analyzed the relationship between our Airbnb decision tree classifications and deprivation rank in wards. Deprivation rank is a relative measure comparing the level of deprivation across London wards. The lower the deprivation rank, the greater the deprivation score in the ward.
+To assess potential social impact of Airbnb in London, we analysed the relationship between our Airbnb decision tree classifications and deprivation rank in wards. Deprivation rank is a relative measure comparing the level of deprivation across London wards. The lower the deprivation rank, the greater the deprivation score in the ward.
 
 #### EDA
 
@@ -685,7 +685,7 @@ We begin with an exploratory data analysis of deprivation and ward classificatio
 
 #### Spatial Autocorrelation Analysis
 
-The question of remains where overlaps between “at-risk” wards and high deprivation occur. Spatial autocorrelation analysis of deprivation in London wards was employed to assess the spatial distribution of deprived wards and examine which “at-risk” wards lie within high deprivation clusters. Cluster analysis improves the generalizability of the study by identifying patterns of deprivation beyond individual wards with arbitrary boundaries.
+Spatial autocorrelation analysis of deprivation in London wards was employed to assess the spatial distribution of deprived wards and examine which “at-risk” wards lie within high deprivation clusters. Cluster analysis improves the generalizability of the study by identifying patterns of deprivation beyond individual wards with arbitrary boundaries.
 
 Moran's I:
 
@@ -712,8 +712,6 @@ print(f"p-value: {moran_p_value}")
 ```
 
 A Moran’s I test is conducted to establish that deprivation is not randomly distributed across wards in London. A Global Moran’s I statistic of 0.689 with a p-value less than 0.05 indicates there is statistically significant clustering of deprivation in London wards.
-
-LISA:
 
 ```{python}
 # Ensure the weights are row-standardized
