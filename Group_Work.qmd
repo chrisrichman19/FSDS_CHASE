@@ -428,7 +428,7 @@ room_type_counts.columns = ["Room Type", "Count"]
 #plt.show()
 ```
 
-GLA have discovered that hosts with multiple listings on Airbnb are more likely to be using the platform for commercial purposes (@balogun_2024, 2024, p.25). The total number of hosts with two or more listings is 6253 with the average number of listings per host being 7.06. The maximum number of listings is 1253 that belong to Sykes Holiday Cottages. This shows that the Airbnb market in London is commercialised and does not adhere to the GLA 90-night policy limit. 
+GLA have discovered that hosts with multiple listings on Airbnb are more likely to be using the platform for commercial purposes (@cromarty_2024, 2024, p.25). The total number of hosts with two or more listings is 6253 with the average number of listings per host being 7.06. The maximum number of listings is 1253 that belong to Sykes Holiday Cottages. This shows that the Airbnb market in London is commercialised and does not adhere to the GLA 90-night policy limit. 
 
 ```{python}
 # Filter hosts with total listings greater than 2
