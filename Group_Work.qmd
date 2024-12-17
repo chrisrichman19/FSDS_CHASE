@@ -367,7 +367,7 @@ borough_counts = borough_counts.sort_values(by="Percentage", ascending=False)
 
 ### Properties Available for over 90+ Nights
 
-A concern Airbnb imposes in London is ‘commercialisation’. The Greater London Authority (GLA) states that “it creates a risk of residential properties being used as letting businesses without the required planning permission and protections for neighbours” (@balogun_2024, p.26). To avoid this issue, homeowners are required to obtain planning permission if they intend to use residential properties for short-term accommodation exceeding 90 nights.
+A concern Airbnb imposes in London is ‘commercialisation’. The Greater London Authority (GLA) states that “it creates a risk of residential properties being used as letting businesses without the required planning permission and protections for neighbours” (@cromarty_2024, p.26). To avoid this issue, homeowners are required to obtain planning permission if they intend to use residential properties for short-term accommodation exceeding 90 nights.
 In the current 2024 analysis, there is a total of 6254 listings available for over 90+ nights. Westminster has 15.7% of those listings and Kensington and Chelsea at 9%.
 
 ```{python}
